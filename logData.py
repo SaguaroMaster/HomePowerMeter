@@ -10,6 +10,14 @@ dbname='dummy.db'
 sampleFreqency = 10
 reset = True
 time1 = time.time()
+'''
+import RPi.GPIO as GPIO  
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
+GPIO.add_event_detect(17, GPIO.FALLING, callback=my_callback, bouncetime=100) 
+def my_callback(channel):  
+    print ("falling edge detected on 17")  
+	'''
 
 # log sensor data on database
 def logData (power, energy):

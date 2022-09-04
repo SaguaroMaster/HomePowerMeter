@@ -1,15 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-#  appDHT_v1.py
-#  
-#  Created by MJRoBot.org 
-#  10Jan18
-
-'''
-	RPi WEb Server for DHT captured data with Graph plot  
-'''
-
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -20,7 +10,7 @@ from flask import Flask, render_template, send_file, make_response, request
 app = Flask(__name__)
 
 import sqlite3
-conn=sqlite3.connect('./dummy.db', check_same_thread=False)
+conn=sqlite3.connect('../dummy.db', check_same_thread=False)
 curs=conn.cursor()
 
 lock = threading.Lock()
@@ -78,8 +68,8 @@ def index():
 	time, power, energy = getLastData()
 	templateData = {
 	  'time'		: time,
-      'temp'		: power,
-      'hum'			: energy,
+      'power'		: power,
+      'energy'		: energy,
       'numSamples'	: numSamples
 	}
 	return render_template('index_gage.html', **templateData)
@@ -93,12 +83,12 @@ def my_form_post():
     if (numSamples > numMaxSamples):
         numSamples = (numMaxSamples-1)
     
-    time, temp, hum = getLastData()
+    time, power, energy = getLastData()
     
     templateData = {
 	  'time'		: time,
-      'temp'		: temp,
-      'hum'			: hum,
+      'power'		: power,
+      'energy'		: energy,
       'numSamples'	: numSamples
 	}
     return render_template('index_gage.html', **templateData)
@@ -115,7 +105,7 @@ def plot_power():
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
 		axis.set_title("Power [kW]")
-		axis.set_xlabel("Samples")
+		axis.set_xlabel("Date[M:D H:M:S]")
 		axis.set_xticks(range(0, numSamples, int(numSamples/3)))
 		axis.grid(True)
 		xs = times
@@ -140,7 +130,7 @@ def plot_energy():
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
 		axis.set_title("Energy [Wh]")
-		axis.set_xlabel("Samples")
+		axis.set_xlabel("Date[M:D H:M:S]")
 		axis.set_xticks(range(0, numSamples, int(numSamples/3)))
 		axis.grid(True)
 		xs = times

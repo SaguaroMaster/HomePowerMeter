@@ -2,8 +2,14 @@
 <html>
 
 <head>
-    <title>DHT Data Sensor</title>
-    <link rel="stylesheet" href='../static/style.css'/>
+    <title>Home Power Meter</title>
+    
+	<link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href='../static/style.css'/>
+	<link rel="icon" type="image/x-icon" href="favico.ico">
+	<script src="../static/jquery-3.6.1.min.js"></script>
+	<script src="../static/popper.min.js"></script>
+	<script src="../static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style>
 		body {
@@ -22,49 +28,53 @@
 </head>
 
 <body>
-	<h1>DHT Sensor Data </h1>
+	<h1>Home Power Meter </h1>
     <div id="g1"></div>
     <div id="g2"></div>
     <hr>
-	<h3> Last Sensors Reading: {{ time }} ==> <a href="/"class="button">REFRESH</a></h3>	
+	<h3> Last Sensors Reading: {{ time }}</h3>	
+	<a href="/"class="btn btn-primary">REFRESH</a>
 	<hr>
 	<h3> HISTORICAL DATA </h3>
 		<p> Enter number of samples to retrieve:
 		<form method="POST">
+		<div class="d-flex align-items-center justify-content-center">
 			<input name="numSamples" value= {{numSamples}}>
-			<input type="submit">
+			<input type="submit" class="btn btn-info" style="margin-left: 1%;">
+		</div>
 		</form></p>
 		<hr>
 		<img src="/plot/power" alt="Image Placeholder" width="49%">
 		<img src="/plot/energy" alt="Image Placeholder" width="49%">
 	
-	<p> @2018 Developed by MJRoBot.org</p>
+	<p> @2022 Developed by Saguaro</p>
     
     <script src="../static/raphael-2.1.4.min.js"></script>
     <script src="../static/justgage.js"></script>
+
     <script>
 		var g1, g2;
 		document.addEventListener("DOMContentLoaded", function(event) {
 			g1 = new JustGage({
 				id: "g1",
-				value: {{temp}},
-				valueFontColor: "yellow",
-				titleFontColor: "yellow",
+				value: {{power}},
+				valueFontColor: "black",
+				titleFontColor: "black",
 				min: -10,
 				max: 50,
-				title: "Temperature",
-				label: "Celcius"
+				title: "Power",
+				label: "kW"
 			});
 
 			g2 = new JustGage({
 				id: "g2",
-				value: {{hum}},
-				valueFontColor: "yellow",
-				titleFontColor: "yellow",
+				value: {{energy}},
+				valueFontColor: "black",
+				titleFontColor: "black",
 				min: 0,
-				max: 100,
-				title: "Humidity",
-				label: "%"
+				max: 5000,
+				title: "Energy",
+				label: "Wh"
 			});
 
 		});

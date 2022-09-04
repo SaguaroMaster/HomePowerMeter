@@ -8,7 +8,7 @@ import sqlite3
 
 # Retrieve data from database
 def getData():
-	conn=sqlite3.connect('../dummy.db')
+	conn=sqlite3.connect('./dummy.db')
 	curs=conn.cursor()
 
 	for row in curs.execute("SELECT * FROM data ORDER BY timestamp DESC LIMIT 1"):

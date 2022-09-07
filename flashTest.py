@@ -10,3 +10,6 @@ def flashCounter(self):
 	print("Flash Detected")
 
 GPIO.add_event_detect(17, GPIO.RISING, callback=flashCounter, bouncetime=50)
+
+while True:
+    pass

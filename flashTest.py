@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import RPi.GPIO as GPIO  
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
+from gpiozero import Button as btn
 
+button = btn(17)
+button.when_pressed = print("Flash!")
 
-def flashCounter(self):
-    print("Flash Detected!")
-
-GPIO.add_event_detect(17, GPIO.RISING, callback=flashCounter, bouncetime=300)
 
 while True:
     pass

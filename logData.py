@@ -17,7 +17,7 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 
-def flashCounter():
+def flashCounter(self):
 	global flashCount
 	flashCount = flashCount + 1
 

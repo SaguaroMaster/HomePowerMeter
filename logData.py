@@ -19,8 +19,6 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def flashCounter():
 	global flashCount
-	if GPIO.input(17) > 0.5:
-		flashCount = flashCount + 1
 	flashCount = flashCount + 1
 
 GPIO.add_event_detect(17, GPIO.RISING, callback=flashCounter, bouncetime=50)

@@ -12,7 +12,7 @@ from flask import Flask, render_template, make_response, request
 app = Flask(__name__)
 
 import sqlite3
-conn=sqlite3.connect('../dummy.db', check_same_thread=False)
+conn=sqlite3.connect('./dummy.db', check_same_thread=False)
 curs=conn.cursor()
 
 lock = threading.Lock()

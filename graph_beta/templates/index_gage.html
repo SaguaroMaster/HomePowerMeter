@@ -1,15 +1,15 @@
 <!doctype html>
 <html>
-
+	
 <head>
     <title>Home Power Meter</title>
     
-	<link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.css">
 	<link rel="stylesheet" href='../static/style.css'/>
 	<link rel="icon" type="image/x-icon" href="favico.ico">
 	<script src="../static/jquery-3.6.1.min.js"></script>
 	<script src="../static/popper.min.js"></script>
-	<script src="../static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+	<script src="../static/bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style>
 		body {
@@ -32,30 +32,31 @@
     <div id="g1"></div>
     <div id="g2"></div>
     <hr>
-	<h3> Last Sensors Reading: {{ time }}</h3>	
-	<a href="/"class="btn btn-primary">REFRESH</a>
+	<h3> Last Sensors Reading: {{ lastDate }}</h3>	
+	<a href="/"class="btn btn-primary">Refresh</a>
 	<hr>
 	<h3> HISTORICAL DATA </h3>
-		<p> Enter number of samples to retrieve:
+		<p> Enter date interval to display:
 		<form method="POST">
-		<div class="d-flex align-items-center justify-content-center">
-			<input type="date" id="start" name="numSamples1"
-				value="2022-09-01"
-				min="2022-09-01"
-				max="2023-12-31"
-				style="margin: .25%">
-			<input type="date" id="end" name="numSamples2"
-				value="2022-09-01" 
-				min="2022-09-01" 
-				max="2023-12-31"
-				style="margin: .25%">
-			<input type="submit" class="btn btn-info" style="margin-left: 1%;">
-		</div>
-		</form></p>
+			<div class="d-flex align-items-center justify-content-center">
+				<input type="date" id="start" name="numSamples1"
+					value="{{lastDate1}}"
+					min="{{firstDate}}"
+					max="{{lastDate1}}"
+					style="margin: .25%">
+				<input type="date" id="end" name="numSamples2"
+					value="{{lastDate1}}" 
+					min="{{firstDate}}"
+					max="{{lastDate1}}"
+					style="margin: .25%">
+				<input type="submit" class="btn btn-info" style="margin-left: 1%;">
+			</div>
+		</form>
+
+	</p>
 		<hr>
 		<img src="/plot/power" alt="Image Placeholder" width="49%">
 		<img src="/plot/energy" alt="Image Placeholder" width="49%">
-	
 	<p> @2022 Developed by Saguaro</p>
     
     <script src="../static/raphael-2.1.4.min.js"></script>
@@ -91,10 +92,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-

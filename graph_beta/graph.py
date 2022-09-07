@@ -6,8 +6,9 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import io
 import threading
+import pandas
 
-from flask import Flask, render_template, send_file, make_response, request
+from flask import Flask, render_template, make_response, request
 app = Flask(__name__)
 
 import sqlite3
@@ -19,6 +20,14 @@ lock = threading.Lock()
 # Retrieve LAST data from database
 def getLastData():
 	for row in curs.execute("SELECT * FROM data ORDER BY timestamp DESC LIMIT 1"):
+		time = str(row[0])
+		power = row[1]
+		energy = row[2]
+	#conn.close()
+	return time, power, energy
+
+def getFirstData():
+	for row in curs.execute("SELECT * FROM data ORDER BY timestamp ASC LIMIT 1"):
 		time = str(row[0])
 		power = row[1]
 		energy = row[2]
@@ -39,62 +48,55 @@ def getHistData (numSamples1, numSamples2):
 	return dates, power, energy
 
 def getHistDataEnergy (numSamples1, numSamples2):
-
-	curs.execute("SELECT * FROM data WHERE timestamp >= '" + str(numSamples1) + "' AND timestamp <= '" + str(numSamples2) + "' ORDER BY timestamp DESC")
-	data = curs.fetchall()
-
-	dates = []
-	energy = []
-	
-	for row in reversed(data):
-		dates.append(row[0])
-		energy.append(row[2])
-	return dates, energy
-
-def maxRowsTable():
-	for row in curs.execute("select COUNT(power) from  data"):
-		maxNumberRows=row[0]
-	return maxNumberRows
+	datesSum = []
+	energySum = []
+	timeInterval = pandas.date_range(str(numSamples1)[:10],str(numSamples2)[:10],freq='d').tolist()
+	for entry1 in timeInterval[:len(timeInterval)-1]:
+		entry2 = entry1 + timedelta(days=1)
+		curs.execute("SELECT SUM(energy) FROM data WHERE timestamp >= '" + str(entry1) + "' AND timestamp <= '" + str(entry2) + "'")
+		dataSum = curs.fetchall()
+		datesSum.append(str(entry1))
+		energySum.append(dataSum[0][0])
+	return datesSum, energySum
 
 #initialize global variables
-global numSamples
-numSamples = maxRowsTable()
-if (numSamples > 101):
-	numSamples = 100
 global numSamples1, numSamples2
 numSamples2, nada2, nada1 = getLastData()
 numSamples1 = datetime.strptime(numSamples2, "%Y-%m-%d %H:%M:%S") - timedelta(days=1)
-
 
 # main route 
 @app.route("/")
 def index():
 	
-	time, power, energy = getLastData()
+	lastDate, power, energy = getLastData()
+	firstDate, nada1, nada2 = getFirstData()
+	lastDate1 = str(datetime.strptime(lastDate, "%Y-%m-%d %H:%M:%S") + timedelta(days=1))
+
 	templateData = {
-	  'time'		: time,
       'power'		: power,
       'energy'		: energy,
-      'numSamples'	: numSamples
+      'firstDate'	: firstDate[:10],
+	  'lastDate1'	: lastDate1[:10],
+	  'lastDate'	: lastDate,
 	}
 	return render_template('index_gage.html', **templateData)
 
 
 @app.route('/', methods=['POST'])
 def my_form_post():
-    global numSamples, numSamples1, numSamples2
+    global  numSamples1, numSamples2
     numSamples1 = request.form['numSamples1']
-    numMaxSamples = maxRowsTable()
-    if (numSamples > numMaxSamples):
-        numSamples = (numMaxSamples-1)
     numSamples2 = request.form['numSamples2']
-    time, power, energy = getLastData()
-    
+    lastDate, power, energy = getLastData()
+    firstDate, nada1, nada2 = getFirstData()
+    lastDate1 = str(datetime.strptime(lastDate, "%Y-%m-%d %H:%M:%S") + timedelta(days=1))
+
     templateData = {
-	  'time'		: time,
       'power'		: power,
       'energy'		: energy,
-      'numSamples'	: numSamples
+      'firstDate'	: firstDate[:10],
+	  'lastDate'	: lastDate,
+	  'lastDate1'	: lastDate1[:10]
 	}
     return render_template('index_gage.html', **templateData)
 	
@@ -111,7 +113,7 @@ def plot_power():
 		axis = fig.add_subplot(1, 1, 1)
 		axis.set_title("Power [kW]")
 		axis.set_xlabel("Date[M:D H:M:S]")
-		axis.set_xticks(range(0, numSamples, int(numSamples/3)))
+		axis.set_xticks([0, int(len(ys)/2), int(len(ys)/1.1)])
 		axis.grid(True)
 		xs = times
 		axis.plot(xs, ys)
@@ -130,16 +132,16 @@ def plot_energy():
 		lock.acquire(True)
 		times, energy = getHistDataEnergy(numSamples1, numSamples2)
 		for j in range(len(times)):
-			times[j]=times[j][5:19]
+			times[j]=times[j][5:10]
 		ys = energy
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
-		axis.set_title("Energy [Wh]")
+		axis.set_title("Energy / day [kWh]")
 		axis.set_xlabel("Date[M:D H:M:S]")
-		axis.set_xticks([0, len(times)/5, len(times)/4, len(times)/3, len(times)/2, len(times)])
+		axis.set_xticks([0, int(len(ys)/2), int(len(ys)/1.1)])
 		axis.grid(True)
 		xs = times
-		axis.plot(xs, ys)
+		axis.bar(xs, ys, width=0.5)
 		canvas = FigureCanvas(fig)
 		output = io.BytesIO()
 		canvas.print_png(output)

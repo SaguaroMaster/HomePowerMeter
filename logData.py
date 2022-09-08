@@ -16,14 +16,13 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
 
 
-
 def flashCounter(self):
 	global flashCount
 	if not GPIO.input(17):
-		print("Button pressed!")
+		print("Light!")
 		flashCount = flashCount + 1
 	else:
-		print("Button released!")
+		print("Dark!")
 
 GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)
 # log sensor data on database

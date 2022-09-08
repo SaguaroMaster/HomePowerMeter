@@ -6,7 +6,7 @@ import sqlite3
 import random
 
 dbname='dummy.db'
-sampleFreqency = 15
+sampleFreqency = 60
 flashCount = 0
 reset = True
 time1 = time.time()

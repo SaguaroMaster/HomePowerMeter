@@ -19,10 +19,13 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def flashCounter(self):
 	global flashCount
-	flashCount = flashCount + 1
-	print("Flash!")
+	if not GPIO.input(17):
+		print("Button pressed!")
+		flashCount = flashCount + 1
+	else:
+		print("Button released!")
 
-GPIO.add_event_detect(17, GPIO.RISING, callback=flashCounter, bouncetime=50)
+GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)
 # log sensor data on database
 def logData (power, energy):
 	

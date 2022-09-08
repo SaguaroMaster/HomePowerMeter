@@ -20,6 +20,7 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 def flashCounter(self):
 	global flashCount
 	flashCount = flashCount + 1
+	print("Flash!")
 
 GPIO.add_event_detect(17, GPIO.RISING, callback=flashCounter, bouncetime=50)
 # log sensor data on database

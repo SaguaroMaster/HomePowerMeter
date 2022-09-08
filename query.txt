@@ -1,0 +1,2 @@
+to set up database:
+CREATE TABLE data(timestamp DATETIME, power NUMERIC, energy NUMERIC);

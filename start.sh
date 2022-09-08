@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 logData.py & python3 web/web.py
+python3 logData.py web/web.py

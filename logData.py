@@ -21,8 +21,6 @@ def flashCounter(self):
 	if not GPIO.input(17):
 		print("Light!")
 		flashCount = flashCount + 1
-	else:
-		print("Dark!")
 
 GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)
 # log sensor data on database

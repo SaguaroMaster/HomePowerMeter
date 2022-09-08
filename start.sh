@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 logData.py & python3 web/web.py &&fg
+sudo python3 /home/pi/what/logData.py & python3 /home/pi/what/web/web.py && fg

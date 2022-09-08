@@ -6,7 +6,7 @@ import sqlite3
 import random
 
 dbname='dummy.db'
-sampleFreqency = 30
+sampleFreqency = 15
 flashCount = 0
 reset = True
 time1 = time.time()
@@ -38,7 +38,7 @@ while True:
 	if time.time() > time1+sampleFreqency:
 		#flashCount = random.randint(3, 11)
 		energy = flashCount #Wh
-		power = energy * 0.36 # kW
+		power = energy * 0.36/(sampleFreqency/10) # kW
 		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
 		logData(power, energy)
 

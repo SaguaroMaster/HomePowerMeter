@@ -40,7 +40,7 @@ while True:
 		energy = flashCount #Wh
 		power = energy * 0.36 # kW
 		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
-		#logData(power, energy)
+		logData(power, energy)
 
 		flashCount = 0
 

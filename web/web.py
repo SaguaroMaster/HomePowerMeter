@@ -108,10 +108,10 @@ def my_form_post():
 	}
     return render_template('index_gage.html', **templateData)
 
-@app.route('/home/pi/dummy.db', methods=['GET', 'POST'])
+@app.route('/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
 	print(app.root_path)
-	return send_from_directory(app.root_path, filename)
+	return send_from_directory("/home/pi", filename)
 
 @app.route('/plot/power')
 def plot_power():

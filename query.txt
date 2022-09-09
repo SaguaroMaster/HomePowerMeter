@@ -1,2 +1,9 @@
 to set up database:
 CREATE TABLE data(timestamp DATETIME, power NUMERIC, energy NUMERIC);
+
+to start thigs on boot do in shell in home directory:
+cp HomePowerMeter/startup.sh startup.sh
+sudo chmod +x startup.sh
+crontab-e
+and write after the comments
+@reboot /home/pi/startup.sh

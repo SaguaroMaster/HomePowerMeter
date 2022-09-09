@@ -8,7 +8,6 @@ import random
 dbname='/home/pi/dummy.db'
 sampleFreqency = 60 #seconds
 flashCount = 0
-reset = True
 time1 = time.time()
 
 import RPi.GPIO as GPIO  

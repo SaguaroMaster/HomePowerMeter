@@ -7,11 +7,13 @@ from matplotlib.figure import Figure
 import io
 import threading
 import pandas
+import os
 
-from flask import Flask, render_template, make_response, request
+from flask import Flask, render_template, send_file, send_from_directory, make_response, request
 app = Flask(__name__)
 
 import sqlite3
+#conn=sqlite3.connect('./dummy.db', check_same_thread=False)
 conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
 curs=conn.cursor()
 
@@ -59,18 +61,24 @@ def getHistDataEnergy (numSamples1, numSamples2):
 		energySum.append(dataSum[0][0])
 	return datesSum, energySum
 
+def setGlobalVars():
+	global numSamples1, numSamples2
+	numSamples1, nada2, nada1 = getLastData()
+	numSamples1 = datetime(*datetime.strptime(numSamples1, "%Y-%m-%d %H:%M:%S").timetuple()[:3])
+	numSamples2 = numSamples1 + timedelta(days=1)
+
 #initialize global variables
 global numSamples1, numSamples2
-numSamples2, nada2, nada1 = getLastData()
-numSamples1 = datetime.strptime(numSamples2, "%Y-%m-%d %H:%M:%S") - timedelta(days=1)
+setGlobalVars()
 
 # main route 
 @app.route("/")
 def index():
-	
 	lastDate, power, energy = getLastData()
 	firstDate, nada1, nada2 = getFirstData()
 	lastDate1 = str(datetime.strptime(lastDate, "%Y-%m-%d %H:%M:%S") + timedelta(days=1))
+
+	setGlobalVars()
 
 	templateData = {
       'power'		: power,
@@ -99,8 +107,12 @@ def my_form_post():
 	  'lastDate1'	: lastDate1[:10]
 	}
     return render_template('index_gage.html', **templateData)
-	
-	
+
+@app.route('/home/pi/dummy.db', methods=['GET', 'POST'])
+def download(filename):
+	print(app.root_path)
+	return send_from_directory(app.root_path, filename)
+
 @app.route('/plot/power')
 def plot_power():
 	try:
@@ -108,6 +120,7 @@ def plot_power():
 		times, power, energy = getHistData(numSamples1, numSamples2)
 		for j in range(len(times)):
 			times[j]=times[j][5:19]
+		xs = times
 		ys = power
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
@@ -115,7 +128,6 @@ def plot_power():
 		axis.set_xlabel("Date[M:D H:M:S]")
 		axis.set_xticks([0, int(len(ys)/2), int(len(ys)/1.1)])
 		axis.grid(True)
-		xs = times
 		axis.plot(xs, ys)
 		canvas = FigureCanvas(fig)
 		output = io.BytesIO()
@@ -133,6 +145,7 @@ def plot_energy():
 		times, energy = getHistDataEnergy(numSamples1, numSamples2)
 		for j in range(len(times)):
 			times[j]=times[j][5:10]
+		xs = times
 		ys = energy
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
@@ -140,7 +153,6 @@ def plot_energy():
 		axis.set_xlabel("Date[M:D H:M:S]")
 		axis.set_xticks([0, int(len(ys)/2), int(len(ys)/1.1)])
 		axis.grid(True)
-		xs = times
 		axis.bar(xs, ys, width=0.5)
 		canvas = FigureCanvas(fig)
 		output = io.BytesIO()

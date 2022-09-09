@@ -166,7 +166,7 @@ def my_form_post():
 
     return render_template('index_gage.html', **templateData)
 
-@app.route('/downloaddatabase', methods=['GET', 'POST'])
+@app.route('/database.db', methods=['GET', 'POST'])
 def download():
 	return send_from_directory("/home/pi", "dummy.db")
 

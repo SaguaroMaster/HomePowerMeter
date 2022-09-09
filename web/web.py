@@ -7,9 +7,8 @@ from matplotlib.figure import Figure
 import io
 import threading
 import pandas
-import os
 
-from flask import Flask, render_template, send_file, send_from_directory, make_response, request
+from flask import Flask, render_template, send_from_directory, make_response, request
 app = Flask(__name__)
 
 import sqlite3
@@ -37,17 +36,15 @@ def getFirstData():
 	return time, power, energy
 
 
-def getHistData (numSamples1, numSamples2):
+def getHistDataPower (numSamples1, numSamples2):
 	curs.execute("SELECT * FROM data WHERE timestamp >= '" + str(numSamples1) + "' AND timestamp <= '" + str(numSamples2) + "' ORDER BY timestamp DESC")
 	data = curs.fetchall()
 	dates = []
 	power = []
-	energy = []
 	for row in reversed(data):
 		dates.append(row[0])
 		power.append(row[1])
-		energy.append(row[2])
-	return dates, power, energy
+	return dates, power
 
 def getHistDataEnergy (numSamples1, numSamples2):
 	datesSum = []
@@ -74,50 +71,67 @@ setGlobalVars()
 # main route 
 @app.route("/")
 def index():
-	lastDate, power, energy = getLastData()
-	firstDate, nada1, nada2 = getFirstData()
-	lastDate1 = str(datetime.strptime(lastDate, "%Y-%m-%d %H:%M:%S") + timedelta(days=1))
+	global  numSamples1, numSamples2
 
 	setGlobalVars()
+
+	numSamples2_1 = numSamples2 - timedelta(days=1)
+	
+	numSamples1_disp = str(numSamples1)[:10]
+	numSamples2_disp = str(numSamples2_1)[:10]
+	
+	lastDate, power, energy = getLastData()
+	firstDate, nada1, nada2 = getFirstData()
 
 	templateData = {
       'power'		: power,
       'energy'		: energy,
-      'firstDate'	: firstDate[:10],
-	  'lastDate1'	: lastDate1[:10],
-	  'lastDate'	: lastDate,
+	  'minDateSel'	: numSamples1_disp,
+	  'maxDateSel'	: numSamples2_disp,
+	  'minDate'		: firstDate[:10],
+	  'maxDate'		: lastDate[:10],
+	  'maxDateFull'	: lastDate,
 	}
+
 	return render_template('index_gage.html', **templateData)
 
 
 @app.route('/', methods=['POST'])
 def my_form_post():
     global  numSamples1, numSamples2
+
     numSamples1 = request.form['numSamples1']
     numSamples2 = request.form['numSamples2']
+    
+    numSamples1_disp = str(numSamples1)[:10]
+    numSamples2_disp = str(numSamples2)[:10]
+
+    numSamples2 = str(datetime.strptime(numSamples2, "%Y-%m-%d") + timedelta(days=1))
+
     lastDate, power, energy = getLastData()
     firstDate, nada1, nada2 = getFirstData()
-    lastDate1 = str(datetime.strptime(lastDate, "%Y-%m-%d %H:%M:%S") + timedelta(days=1))
 
     templateData = {
       'power'		: power,
       'energy'		: energy,
-      'firstDate'	: firstDate[:10],
-	  'lastDate'	: lastDate,
-	  'lastDate1'	: lastDate1[:10]
+	  'minDateSel'	: numSamples1_disp,
+	  'maxDateSel'	: numSamples2_disp,
+	  'minDate'		: firstDate[:10],
+	  'maxDate'		: lastDate[:10],
+	  'maxDateFull'	: lastDate,
 	}
+
     return render_template('index_gage.html', **templateData)
 
 @app.route('/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
-	print(app.root_path)
 	return send_from_directory("/home/pi", filename)
 
 @app.route('/plot/power')
 def plot_power():
 	try:
 		lock.acquire(True)
-		times, power, energy = getHistData(numSamples1, numSamples2)
+		times, power = getHistDataPower(numSamples1, numSamples2)
 		for j in range(len(times)):
 			times[j]=times[j][5:19]
 		xs = times
@@ -150,7 +164,7 @@ def plot_energy():
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
 		axis.set_title("Energy / day [kWh]")
-		axis.set_xlabel("Date[M:D H:M:S]")
+		axis.set_xlabel("Date[Month : Day")
 		axis.set_xticks([0, int(len(ys)/2), int(len(ys)/1.1)])
 		axis.grid(True)
 		axis.bar(xs, ys, width=0.5)

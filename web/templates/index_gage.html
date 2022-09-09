@@ -29,35 +29,53 @@
 
 <body>
 	<h1>Home Power Meter </h1>
-    <div id="g1"></div>
-   <!-- <div id="g2"></div>-->
-    <hr>
-	<h3> Last Sensors Reading: {{ lastDate }}</h3>	
-	<a href="/" class="btn btn-primary">Refresh</a>
-	<a href="{{ url_for('download', filename="dummy.db") }}" class="btn btn-secondary">Download Database</a>
-	<hr>
-	<h3> HISTORICAL DATA </h3>
-		<p> Enter date interval to display:
-		<form method="POST">
-			<div class="d-flex align-items-center justify-content-center">
-				<input type="date" id="start" name="numSamples1"
-					value="{{lastDate1}}"
-					min="{{firstDate}}"
-					max="{{lastDate1}}"
-					style="margin: .25%">
-				<input type="date" id="end" name="numSamples2"
-					value="{{lastDate1}}" 
-					min="{{firstDate}}"
-					max="{{lastDate1}}"
-					style="margin: .25%">
-				<input type="submit" class="btn btn-info" style="margin-left: 1%;">
-			</div>
-		</form>
+	<br>
+	<div class="container">
+		<div class="row">
+			
+			<div class="col" id="g1"></div>
+			<!-- <div id="g2"></div>-->
 
-	</p>
+			<div class="col">
+				<h3> Last Reading: {{ maxDateFull }}</h3>
+				<a href="/" class="btn btn-primary" style="margin-bottom: 3%;">Refresh</a><br>
+				<a href="{{ url_for('download', filename="dummy.db") }}" class="btn btn-secondary">Download Database</a>
+			</div>
+
+			<div class="col">
+				<h3> Graph Data</h3>
+				<form method="POST">
+
+					<input type="date" id="start" name="numSamples1"
+					value="{{minDateSel}}"
+					min="{{minDate}}"
+					max="{{maxDate}}"
+					style="margin: .25%">
+
+					<input type="date" id="end" name="numSamples2"
+					value="{{maxDateSel}}" 
+					min="{{minDate}}"
+					max="{{maxDate}}"
+					style="margin: .25%">
+
+					<input type="submit" class="btn btn-info" style="margin: 2%;">
+					
+				</form>
+				</p>
+			</div>
+		</div>
+
 		<hr>
-		<img src="/plot/power" alt="Power Plot" width="49%">
-		<img src="/plot/energy" alt="Energy Plot" width="49%">
+
+		<div class="row">
+			<div class="col-lg">
+				<img src="/plot/power" alt="Power Plot" width="105%" style="margin-bottom: 0.5%;">
+			</div>
+			<div class="col-lg">
+				<img src="/plot/energy" alt="Energy Plot" width="105%" style="margin-bottom: 0.5%;">
+			</div>
+		</div>		
+	</div>
 	<p> @2022 Developed by Saguaro</p>
     
     <script src="../static/raphael-2.1.4.min.js"></script>

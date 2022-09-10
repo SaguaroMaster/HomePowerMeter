@@ -64,11 +64,14 @@ def getHistDataEnergy (numSamples1, numSamples2):
 	return datesSum, energySum
 
 def getHistDataEnergyToday():
-	entry2 = datetime.today()
-	entry1 = entry2 - timedelta(days = 1)
+	entry1 = datetime.today()
+	entry2 = entry1 + timedelta(days = 1)
 	curs.execute("SELECT SUM(energy) FROM data WHERE timestamp >= '" + str(entry1)[:10] + "' AND timestamp <= '" + str(entry2)[:10] + "'")
 	dataSum = curs.fetchall()
-	energyToday = dataSum[0][0]/1000
+	if dataSum[0][0] is None:
+		energyToday = 0
+	else:
+		energyToday = dataSum[0][0]/1000
 
 	return energyToday
 

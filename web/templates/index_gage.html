@@ -31,11 +31,11 @@
 	<h1>Home Power Meter </h1>
 	<br>
 	<div class="container">
+		
 		<div class="row">
-			
 			<div class="col" id="g1"></div>
-			<!-- <div id="g2"></div>-->
-
+			<div class="col" id="g2"></div>
+			<div class="w-100"></div>
 			<div class="col">
 				<h3> Last Reading: {{ maxDateFull }}</h3>
 				<a href="/" class="btn btn-primary" style="margin-bottom: 3%;">Refresh</a><br>
@@ -101,18 +101,21 @@
 				max: 10,
 				decimals: 2,
 				title: "Power",
-				label: "kW"
+				label: "kW",
+				labelFontColor: "black"
 			});
 
 			g2 = new JustGage({
 				id: "g2",
-				value: {{energy}},
+				value: {{energytoday}},
 				valueFontColor: "black",
 				titleFontColor: "black",
+				decimals: 2,
 				min: 0,
-				max: 5000,
-				title: "Energy",
-				label: "Wh"
+				max: 30,
+				title: "Energy Today",
+				label: "kWh",
+				labelFontColor: "black",
 			});
 
 		});

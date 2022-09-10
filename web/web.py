@@ -63,6 +63,15 @@ def getHistDataEnergy (numSamples1, numSamples2):
 	energySum = convertEnergyToKwh(energySum)
 	return datesSum, energySum
 
+def getHistDataEnergyToday():
+	entry2 = datetime.today()
+	entry1 = entry2 - timedelta(days = 1)
+	curs.execute("SELECT SUM(energy) FROM data WHERE timestamp >= '" + str(entry1)[:10] + "' AND timestamp <= '" + str(entry2)[:10] + "'")
+	dataSum = curs.fetchall()
+	energyToday = dataSum[0][0]/1000
+
+	return energyToday
+
 def getHistDataEnergyDailyAvg (numSamples1, numSamples2):
 	datesSum = []
 	energySum = []
@@ -123,9 +132,11 @@ def index():
 	lastDate, power, energy = getLastData()
 	firstDate, nada1, nada2 = getFirstData()
 
+	energyToday = getHistDataEnergyToday()
+
 	templateData = {
       'power'		: power,
-      'energy'		: energy,
+      'energytoday'	: energyToday,
 	  'minDateSel'	: numSamples1_disp,
 	  'maxDateSel'	: numSamples2_disp,
 	  'minDate'		: firstDate[:10],
@@ -176,14 +187,14 @@ def plot_power():
 		lock.acquire(True)
 		times, power = getHistDataPower(numSamples1, numSamples2)
 		for j in range(len(times)):
-			times[j]=times[j][5:19]
+			times[j]=times[j][11:16]
 		xs = times
 		ys = power
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
-		axis.set_title("Power [kW] [1 Day]")
+		axis.set_title("Power [kW] [Today]")
 		axis.set_xlabel("Date[M:D H:M:S]")
-		axis.set_xticks([0, int(len(ys)/2), int(len(ys)/1.1)])
+		axis.set_xticks([0, int(len(ys)/6), int(len(ys)/3), int(len(ys)/2), int(len(ys)/1.5), int(len(ys)/1.2), int(len(ys)/1.01)])
 		axis.grid(True)
 		axis.plot(xs, ys)
 		canvas = FigureCanvas(fig)
@@ -208,7 +219,7 @@ def plot_energy():
 		axis = fig.add_subplot(1, 1, 1)
 		axis.set_title("Energy / day [kWh]  [30 Days]")
 		axis.set_xlabel("Date [Month : Day] ")
-		axis.set_xticks([0, int(len(ys)/2), int(len(ys)/1.1)])
+		axis.set_xticks([0, int(len(ys)/6), int(len(ys)/3), int(len(ys)/2), int(len(ys)/1.5), int(len(ys)/1.2), int(len(ys)/1.01)])
 		axis.grid(True)
 		axis.bar(xs, ys, width=0.5)
 		canvas = FigureCanvas(fig)

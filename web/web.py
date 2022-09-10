@@ -20,6 +20,10 @@ curs=conn.cursor()
 
 lock = threading.Lock()
 
+#######################
+costPerKwh = 0.14 #EUR
+#######################
+
 # Retrieve LAST data from database
 def getLastData():
 	for row in curs.execute("SELECT * FROM data ORDER BY timestamp DESC LIMIT 1"):
@@ -154,10 +158,10 @@ def index():
 def my_form_post():
     global  numSamples1, numSamples2
 
-    numSamples1 = request.form['numSamples1']
+    #numSamples1 = request.form['numSamples1']
     numSamples2 = request.form['numSamples2']
 
-    numSamples1 = datetime.strptime(numSamples1, "%Y-%m-%d")
+    #numSamples1 = datetime.strptime(numSamples1, "%Y-%m-%d")
     numSamples2 = datetime.strptime(numSamples2, "%Y-%m-%d")
     
     numSamples1_disp = str(numSamples1)[:10]
@@ -168,9 +172,11 @@ def my_form_post():
     lastDate, power, energy = getLastData()
     firstDate, nada1, nada2 = getFirstData()
 
+    energyToday = getHistDataEnergyToday()
+
     templateData = {
       'power'		: power,
-      'energy'		: energy,
+      'energytoday'	: energyToday,
 	  'minDateSel'	: numSamples1_disp,
 	  'maxDateSel'	: numSamples2_disp,
 	  'minDate'		: firstDate[:10],
@@ -196,7 +202,7 @@ def plot_power():
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
 		axis.set_title("Power [kW] [Today]")
-		axis.set_xlabel("Date[M:D H:M:S]")
+		axis.set_xlabel("Time [Hour:Minute]")
 		axis.set_xticks([0, int(len(ys)/6), int(len(ys)/3), int(len(ys)/2), int(len(ys)/1.5), int(len(ys)/1.2), int(len(ys)/1.01)])
 		axis.grid(True)
 		axis.plot(xs, ys)
@@ -218,13 +224,16 @@ def plot_energy():
 			times[j]=times[j][5:10]
 		xs = times
 		ys = energy
+		ysCost = [x * costPerKwh for x in ys]
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
-		axis.set_title("Energy / day [kWh]  [30 Days]")
+		axis.set_title("Energy & Cost / day  [30 Days]")
 		axis.set_xlabel("Date [Month : Day] ")
 		axis.set_xticks([0, int(len(ys)/6), int(len(ys)/3), int(len(ys)/2), int(len(ys)/1.5), int(len(ys)/1.2), int(len(ys)/1.01)])
 		axis.grid(True)
-		axis.bar(xs, ys, width=0.5)
+		p1 = axis.bar(xs, ys, width=0.5)
+		p2 = axis.bar(xs, ysCost, width=0.5)
+		axis.legend((p1[0], p2[0]), ('Energy [kWh]', 'Cost [€]'))
 		canvas = FigureCanvas(fig)
 		output = io.BytesIO()
 		canvas.print_png(output)
@@ -243,12 +252,15 @@ def plot_energyDailyAvg():
 			times[j]=times[j][5:7]
 		xs = times
 		ys = energy
+		ysCost = [x * costPerKwh for x in ys]
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
-		axis.set_title("Average Energy / Day / Month [kWh]  [12 Months]")
+		axis.set_title("Average Energy & Cost / Day / Month  [12 Months]")
 		axis.set_xlabel("Date [Month]")
 		axis.grid(True)
-		axis.bar(xs, ys, width=0.5)
+		p1 = axis.bar(xs, ys, width=0.5)
+		p2 = axis.bar(xs, ysCost, width=0.5)
+		axis.legend((p1[0], p2[0]), ('Energy [kWh]', 'Cost [€]'))
 		canvas = FigureCanvas(fig)
 		output = io.BytesIO()
 		canvas.print_png(output)
@@ -267,12 +279,15 @@ def plot_energyDailyMonthly():
 			times[j]=times[j][5:7]
 		xs = times
 		ys = energy
+		ysCost = [x * costPerKwh for x in ys]
 		fig = Figure()
 		axis = fig.add_subplot(1, 1, 1)
-		axis.set_title("Energy / month [kWh] [12 Months]")
+		axis.set_title("Energy & Cost/ month  [12 Months]")
 		axis.set_xlabel("Date [Year : Month]")
 		axis.grid(True)
-		axis.bar(xs, ys, width=0.5)
+		p1 = axis.bar(xs, ys, width=0.5)
+		p2 = axis.bar(xs, ysCost, width=0.5)
+		axis.legend((p1[0], p2[0]), ('Energy [kWh]', 'Cost [€]'))
 		canvas = FigureCanvas(fig)
 		output = io.BytesIO()
 		canvas.print_png(output)

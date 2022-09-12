@@ -26,7 +26,7 @@ demo = {
         
         datasets: [{
             label: 'Power [kW]',
-            borderColor: "#5fa384",
+            borderColor: "#5fa383",
             backgroundColor: "#85e6ba",
             pointRadius: 0,
             pointHoverRadius: 0,

@@ -14,8 +14,8 @@ from flask import Flask, render_template, send_from_directory, make_response, re
 app = Flask(__name__)
 
 import sqlite3
-conn=sqlite3.connect('./dummy.db', check_same_thread=False)
-#conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
+#conn=sqlite3.connect('./dummy.db', check_same_thread=False)
+conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
 curs=conn.cursor()
 
 lock = threading.Lock()

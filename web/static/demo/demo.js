@@ -26,8 +26,8 @@ demo = {
         
         datasets: [{
             label: 'Power [kW]',
-            borderColor: "#0578f2",
-            backgroundColor: "#a1ceff",
+            borderColor: "#5fa384",
+            backgroundColor: "#85e6ba",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
@@ -91,8 +91,8 @@ demo = {
         datasets: [
           {
             label: 'Cost [€]',
-            borderColor: "#fa9b52",
-            backgroundColor: "#fa9b52",
+            borderColor: "#fc8474",
+            backgroundColor: "#fc8474",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
@@ -100,8 +100,8 @@ demo = {
           },
           {
             label: 'Energy [kWh]',
-            borderColor: "#fad652",
-            backgroundColor: "#fad652",
+            borderColor: "#facf73",
+            backgroundColor: "#facf73",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
@@ -170,8 +170,8 @@ demo = {
         datasets: [
           {
             label: 'Cost [€]',
-            borderColor: "#fa9b52",
-            backgroundColor: "#fa9b52",
+            borderColor: "#fc8474",
+            backgroundColor: "#fc8474",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
@@ -179,8 +179,8 @@ demo = {
           },
           {
             label: 'Energy [kWh]',
-            borderColor: "#fad652",
-            backgroundColor: "#fad652",
+            borderColor: "#facf73",
+            backgroundColor: "#facf73",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
@@ -252,8 +252,8 @@ demo = {
         datasets: [
           {
             label: 'Cost [€]',
-            borderColor: "#fa9b52",
-            backgroundColor: "#fa9b52",
+            borderColor: "#fc8474",
+            backgroundColor: "#fc8474",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,
@@ -261,8 +261,8 @@ demo = {
           },
           {
             label: 'Energy [kWh]',
-            borderColor: "#fad652",
-            backgroundColor: "#fad652",
+            borderColor: "#facf73",
+            backgroundColor: "#facf73",
             pointRadius: 0,
             pointHoverRadius: 0,
             borderWidth: 3,

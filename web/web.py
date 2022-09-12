@@ -14,8 +14,8 @@ from flask import Flask, render_template, send_from_directory, make_response, re
 app = Flask(__name__)
 
 import sqlite3
-#conn=sqlite3.connect('./dummy.db', check_same_thread=False)
-conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
+conn=sqlite3.connect('./dummy.db', check_same_thread=False)
+#conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
 curs=conn.cursor()
 
 lock = threading.Lock()
@@ -124,12 +124,32 @@ def setGlobalVars():
 global numSamples1, numSamples2
 setGlobalVars()
 
+
+
 # main route 
 @app.route("/")
 def index():
 	global  numSamples1, numSamples2
-
 	setGlobalVars()
+
+	PowerToday = getHistDataPower(numSamples1, numSamples2)
+	for j in range(len(PowerToday[0])):
+			PowerToday[0][j]=PowerToday[0][j][11:16]
+
+	DailyEnergy = getHistDataEnergy(numSamples1, numSamples2)	# DailyEnergy[0] - date // DailyEnergy[1] - energy values in kWh
+	for j in range(len(DailyEnergy[0])):
+			DailyEnergy[0][j]=DailyEnergy[0][j][5:10]
+	DailyEnergyCost = [x * costPerKwh for x in DailyEnergy[1]]
+
+	AverageEnergyDaily = getHistDataEnergyDailyAvg(numSamples1, numSamples2)
+	for j in range(len(AverageEnergyDaily[0])):
+			AverageEnergyDaily[0][j]=AverageEnergyDaily[0][j][5:7]
+	AverageEnergyDailyCost = [x * costPerKwh for x in AverageEnergyDaily[1]]
+
+	MonthlyEnergyConsumed = getHistDataEnergyMonthly(numSamples1, numSamples2)
+	for j in range(len(MonthlyEnergyConsumed[0])):
+			MonthlyEnergyConsumed[0][j]=MonthlyEnergyConsumed[0][j][5:7]
+	MonthlyEnergyConsumedCost = [x * costPerKwh for x in MonthlyEnergyConsumed[1]]
 
 	numSamples2_1 = numSamples2 - timedelta(days=1)
 	
@@ -148,26 +168,55 @@ def index():
 	  'maxDateSel'	: numSamples2_disp,
 	  'minDate'		: firstDate[:10],
 	  'maxDate'		: lastDate[:10],
-	  'maxDateFull'	: lastDate,
+	  'maxDateFull'	: lastDate[11:],
+	  'averageEnergyOverall'	: 10,
+	  'powerX'					: PowerToday[0],
+	  'powerY'					: PowerToday[1],
+	  'energyDailyMonthX'		: DailyEnergy[0],
+	  'energyDailyMonthY'		: DailyEnergy[1],
+	  'energyDailyMonthCostY'	: DailyEnergyCost,
+	  'averageEnergyX'			: AverageEnergyDaily[0],
+	  'averageEnergyY'			: AverageEnergyDaily[1],
+	  'averageEnergyCostY'		: AverageEnergyDailyCost,
+	  'totalEnergyX'			: MonthlyEnergyConsumed[0],
+	  'totalEnergyY'			: MonthlyEnergyConsumed[1],
+	  'totalEnergyCostY'		: MonthlyEnergyConsumedCost
 	}
 
-	return render_template('index_gage.html', **templateData)
+	return render_template('dashboard.html', **templateData)
 
 
 @app.route('/', methods=['POST'])
 def my_form_post():
     global  numSamples1, numSamples2
 
-    #numSamples1 = request.form['numSamples1']
     numSamples2 = request.form['numSamples2']
-
-    #numSamples1 = datetime.strptime(numSamples1, "%Y-%m-%d")
     numSamples2 = datetime.strptime(numSamples2, "%Y-%m-%d")
-    
+
     numSamples1_disp = str(numSamples1)[:10]
     numSamples2_disp = str(numSamples2)[:10]
 
     numSamples2 = numSamples2 + timedelta(days=1)
+
+    PowerToday = getHistDataPower(numSamples1, numSamples2)
+	
+    for j in range(len(PowerToday[0])):
+        PowerToday[0][j]=PowerToday[0][j][11:16]
+
+    DailyEnergy = getHistDataEnergy(numSamples1, numSamples2)	# DailyEnergy[0] - date // DailyEnergy[1] - energy values in kWh
+    for j in range(len(DailyEnergy[0])):
+        DailyEnergy[0][j]=DailyEnergy[0][j][5:10]
+    DailyEnergyCost = [x * costPerKwh for x in DailyEnergy[1]]
+
+    AverageEnergyDaily = getHistDataEnergyDailyAvg(numSamples1, numSamples2)
+    for j in range(len(AverageEnergyDaily[0])):
+        AverageEnergyDaily[0][j]=AverageEnergyDaily[0][j][5:7]
+    AverageEnergyDailyCost = [x * costPerKwh for x in AverageEnergyDaily[1]]
+
+    MonthlyEnergyConsumed = getHistDataEnergyMonthly(numSamples1, numSamples2)
+    for j in range(len(MonthlyEnergyConsumed[0])):
+        MonthlyEnergyConsumed[0][j]=MonthlyEnergyConsumed[0][j][5:7]
+    MonthlyEnergyConsumedCost = [x * costPerKwh for x in MonthlyEnergyConsumed[1]]
 
     lastDate, power, energy = getLastData()
     firstDate, nada1, nada2 = getFirstData()
@@ -181,10 +230,51 @@ def my_form_post():
 	  'maxDateSel'	: numSamples2_disp,
 	  'minDate'		: firstDate[:10],
 	  'maxDate'		: lastDate[:10],
-	  'maxDateFull'	: lastDate,
+	  'maxDateFull'	: lastDate[11:],
+	  'averageEnergyOverall'	: 10,
+	  'powerX'					: PowerToday[0],
+	  'powerY'					: PowerToday[1],
+	  'energyDailyMonthX'		: DailyEnergy[0],
+	  'energyDailyMonthY'		: DailyEnergy[1],
+	  'energyDailyMonthCostY'	: DailyEnergyCost,
+	  'averageEnergyX'			: AverageEnergyDaily[0],
+	  'averageEnergyY'			: AverageEnergyDaily[1],
+	  'averageEnergyCostY'		: AverageEnergyDailyCost,
+	  'totalEnergyX'			: MonthlyEnergyConsumed[0],
+	  'totalEnergyY'			: MonthlyEnergyConsumed[1],
+	  'totalEnergyCostY'		: MonthlyEnergyConsumedCost
 	}
 
-    return render_template('index_gage.html', **templateData)
+    return render_template('dashboard.html', **templateData)
+
+@app.route("/icons.html")
+def icons():
+	
+	return render_template('icons.html')
+
+@app.route("/notifications.html")
+def notifications():
+	
+	return render_template('notifications.html')
+
+@app.route("/tables.html")
+def tables():
+	
+	return render_template('tables.html')
+
+@app.route("/typography.html")
+def typography():
+	
+	return render_template('typography.html')
+
+@app.route("/user.html")
+def user():
+	
+	return render_template('user.html')
+
+
+
+
 
 @app.route('/database.db', methods=['GET', 'POST'])
 def download():

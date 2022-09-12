@@ -135,6 +135,7 @@ def index():
 	PowerToday = getHistDataPower(numSamples1, numSamples2)
 	for j in range(len(PowerToday[0])):
 			PowerToday[0][j]=PowerToday[0][j][11:16]
+	PowerTodayRounded = [round(x, 2) for x in DailyEnergy[1]]
 
 	DailyEnergy = getHistDataEnergy(numSamples1, numSamples2)	# DailyEnergy[0] - date // DailyEnergy[1] - energy values in kWh
 	for j in range(len(DailyEnergy[0])):
@@ -170,7 +171,7 @@ def index():
 	  'maxDate'		: lastDate[:10],
 	  'maxDateFull'	: lastDate[11:],
 	  'averageEnergyOverall'	: 10,
-	  'powerX'					: PowerToday[0],
+	  'powerX'					: PowerTodayRounded,
 	  'powerY'					: PowerToday[1],
 	  'energyDailyMonthX'		: DailyEnergy[0],
 	  'energyDailyMonthY'		: DailyEnergy[1],
@@ -202,6 +203,7 @@ def my_form_post():
 	
     for j in range(len(PowerToday[0])):
         PowerToday[0][j]=PowerToday[0][j][11:16]
+    PowerTodayRounded = [round(x, 2) for x in DailyEnergy[1]]
 
     DailyEnergy = getHistDataEnergy(numSamples1, numSamples2)	# DailyEnergy[0] - date // DailyEnergy[1] - energy values in kWh
     for j in range(len(DailyEnergy[0])):
@@ -232,7 +234,7 @@ def my_form_post():
 	  'maxDate'		: lastDate[:10],
 	  'maxDateFull'	: lastDate[11:],
 	  'averageEnergyOverall'	: 10,
-	  'powerX'					: PowerToday[0],
+	  'powerX'					: PowerTodayRounded,
 	  'powerY'					: PowerToday[1],
 	  'energyDailyMonthX'		: DailyEnergy[0],
 	  'energyDailyMonthY'		: DailyEnergy[1],

@@ -34,7 +34,7 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li>
             <a href="./">
               <i class="nc-icon nc-bank"></i>
               <p>Dashboard</p>
@@ -52,7 +52,7 @@
               <p>Usage</p>
             </a>
           </li>
-          <li>
+          <li class="active ">
             <a href="./settings.html">
               <i class="nc-icon nc-settings-gear-65"></i>
               <p>Settings</p>
@@ -87,24 +87,7 @@
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
           </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            Get Graph Data: &nbsp;
-            <form method="POST">
-              <div class="input-group no-border">
-
-                  <input class="form-control" type="date" id="end" name="numSamples2"
-                  value="{{maxDateSel}}" 
-                  min="{{minDate}}"
-                  max="{{maxDate}}"
-                  style="margin: .25%">
-        
-                  <input type="submit" class="btn btn-info" style="margin: 2%;">
-                
-              </div>
-            </form>
-            <ul class="navbar-nav">
-            </ul>
-          </div>
+          
         </div>
       </nav>
       <!-- End Navbar -->
@@ -214,52 +197,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Power Today</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="power-today" data-graphdatax='{{ powerX|tojson }}' data-graphdatay='{{ powerY|tojson }}' height="100"></canvas>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Energy Consumption / Day</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="daily-energy" data-graphdatax='{{ energyDailyMonthX|tojson }}' data-graphdatay='{{ energyDailyMonthY|tojson }}' data-graphdatacosty='{{ energyDailyMonthCostY|tojson }}' height="100"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Average Energy / Day / Month</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="average-energy" data-graphdatax='{{ averageEnergyX|tojson }}' data-graphdatay='{{ averageEnergyY|tojson }}' data-graphdatacosty='{{ averageEnergyCostY|tojson }}' height="100"></canvas>
-              </div>
-              
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Total Energy / Month</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="total-energy" data-graphdatax='{{ totalEnergyX|tojson }}' data-graphdatay='{{ totalEnergyY|tojson }}' data-graphdatacosty='{{ totalEnergyCostY|tojson }}' height="100"></canvas>
-              </div>
-              
           </div>
         </div>
         

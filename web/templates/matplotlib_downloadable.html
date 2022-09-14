@@ -34,13 +34,13 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li>
             <a href="./">
               <i class="nc-icon nc-bank"></i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li>
+          <li class="active ">
             <a href="./matplotlib_downloadable.html">
               <i class="nc-icon nc-album-2"></i>
               <p>Old Graphs</p>
@@ -223,7 +223,7 @@
                 <h5 class="card-title">Power Today</h5>
               </div>
               <div class="card-body">
-                <canvas id="power-today" data-graphdatax='{{ powerX|tojson }}' data-graphdatay='{{ powerY|tojson }}' height="100"></canvas>
+                <img src="/plot/power" alt="Power Plot" width="105%" style="margin-bottom: 0.5%;">
               </div>
             </div>
           </div>
@@ -233,7 +233,7 @@
                 <h5 class="card-title">Energy Consumption / Day</h5>
               </div>
               <div class="card-body">
-                <canvas id="daily-energy" data-graphdatax='{{ energyDailyMonthX|tojson }}' data-graphdatay='{{ energyDailyMonthY|tojson }}' data-graphdatacosty='{{ energyDailyMonthCostY|tojson }}' height="100"></canvas>
+                <img src="/plot/energy" alt="Energy Plot" width="105%" style="margin-bottom: 0.5%;">
               </div>
             </div>
           </div>
@@ -246,7 +246,7 @@
                 <h5 class="card-title">Average Energy / Day / Month</h5>
               </div>
               <div class="card-body">
-                <canvas id="average-energy" data-graphdatax='{{ averageEnergyX|tojson }}' data-graphdatay='{{ averageEnergyY|tojson }}' data-graphdatacosty='{{ averageEnergyCostY|tojson }}' height="100"></canvas>
+                <img src="/plot/energydailyavg" alt="Daily Average Energy Plot" width="105%" style="margin-bottom: 0.5%;">
               </div>
               
             </div>
@@ -257,7 +257,7 @@
                 <h5 class="card-title">Total Energy / Month</h5>
               </div>
               <div class="card-body">
-                <canvas id="total-energy" data-graphdatax='{{ totalEnergyX|tojson }}' data-graphdatay='{{ totalEnergyY|tojson }}' data-graphdatacosty='{{ totalEnergyCostY|tojson }}' height="100"></canvas>
+                <img src="/plot/energymonthly" alt="Monthly Energy Plot" width="105%" style="margin-bottom: 0.5%;">
               </div>
               
           </div>

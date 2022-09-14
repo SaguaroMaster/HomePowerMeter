@@ -30,17 +30,15 @@ def getLastData():
 	for row in curs.execute("SELECT * FROM data ORDER BY timestamp DESC LIMIT 1"):
 		time = str(row[0])
 		power = row[1]
-		energy = row[2]
 	#conn.close()
-	return time, power, energy
+	return time, power
 
 def getFirstData():
 	for row in curs.execute("SELECT * FROM data ORDER BY timestamp ASC LIMIT 1"):
 		time = str(row[0])
 		power = row[1]
-		energy = row[2]
 	#conn.close()
-	return time, power, energy
+	return time, power
 
 
 def getHistDataPower (numSamples1, numSamples2):
@@ -117,7 +115,7 @@ def convertEnergyToKwh(energy):
 
 def setGlobalVars():
 	global numSamples1, numSamples2
-	numSamples1, nada2, nada1 = getLastData()
+	numSamples1, nada2 = getLastData()
 	numSamples1 = datetime(*datetime.strptime(numSamples1, "%Y-%m-%d %H:%M:%S").timetuple()[:3])
 	numSamples2 = numSamples1 + timedelta(days=1)
 
@@ -136,7 +134,6 @@ def index():
 	PowerToday = getHistDataPower(numSamples1, numSamples2)
 	for j in range(len(PowerToday[0])):
 			PowerToday[0][j]=PowerToday[0][j][11:16]
-	PowerTodayRounded = [round(x, 2) for x in PowerToday[1]]
 
 	DailyEnergy = getHistDataEnergy(numSamples1, numSamples2)	# DailyEnergy[0] - date // DailyEnergy[1] - energy values in kWh
 	for j in range(len(DailyEnergy[0])):
@@ -160,8 +157,9 @@ def index():
 	numSamples1_disp = str(numSamples1)[:10]
 	numSamples2_disp = str(numSamples2_1)[:10]
 	
-	lastDate, power, energy = getLastData()
-	firstDate, nada1, nada2 = getFirstData()
+	lastDate, power = getLastData()
+	firstDate, nada1 = getFirstData()
+	power = round(power, 2)
 
 	energyToday = getHistDataEnergyToday()
 
@@ -174,7 +172,7 @@ def index():
 		'maxDate'					: lastDate[:10],
 		'maxDateFull'				: lastDate[11:],
 		'powerX'					: PowerToday[0],
-		'powerY'					: PowerTodayRounded,
+		'powerY'					: PowerToday[1],
 		'energyDailyMonthX'			: DailyEnergy[0],
 		'energyDailyMonthY'			: DailyEnergy[1],
 		'energyDailyMonthCostY'		: DailyEnergyCost,
@@ -203,10 +201,8 @@ def my_form_post():
     numSamples2 = numSamples2 + timedelta(days=1)
 
     PowerToday = getHistDataPower(numSamples1, numSamples2)
-	
     for j in range(len(PowerToday[0])):
         PowerToday[0][j]=PowerToday[0][j][11:16]
-    PowerTodayRounded = [round(x, 2) for x in PowerToday[1]]
 
     DailyEnergy = getHistDataEnergy(numSamples1, numSamples2)	# DailyEnergy[0] - date // DailyEnergy[1] - energy values in kWh
     for j in range(len(DailyEnergy[0])):
@@ -223,10 +219,11 @@ def my_form_post():
         MonthlyEnergyConsumed[0][j]=MonthlyEnergyConsumed[0][j][5:7]
     MonthlyEnergyConsumedCost = [x * costPerKwh for x in MonthlyEnergyConsumed[1]]
 
-    cpu = CPUTemperature()
+    #cpu = CPUTemperature()
 
-    lastDate, power, energy = getLastData()
-    firstDate, nada1, nada2 = getFirstData()
+    lastDate, power = getLastData()
+    firstDate, nada1 = getFirstData()
+    power = round(power, 2)
 
     energyToday = getHistDataEnergyToday()
 
@@ -239,7 +236,7 @@ def my_form_post():
 		'maxDate'					: lastDate[:10],
 		'maxDateFull'				: lastDate[11:],
 		'powerX'					: PowerToday[0],
-		'powerY'					: PowerTodayRounded,
+		'powerY'					: PowerToday[1],
 		'energyDailyMonthX'			: DailyEnergy[0],
 		'energyDailyMonthY'			: DailyEnergy[1],
 		'energyDailyMonthCostY'		: DailyEnergyCost,
@@ -249,10 +246,131 @@ def my_form_post():
 		'totalEnergyX'				: MonthlyEnergyConsumed[0],
 		'totalEnergyY'				: MonthlyEnergyConsumed[1],
 		'totalEnergyCostY'			: MonthlyEnergyConsumedCost,
-		'sysTemp'					: round(cpu.temperature, 1)
+		#'sysTemp'					: round(cpu.temperature, 1)
 	}
 
     return render_template('dashboard.html', **templateData)
+
+@app.route("/matplotlib_downloadable.html")
+def old_graphs():
+	global  numSamples1, numSamples2
+	setGlobalVars()
+	#cpu = CPUTemperature()
+
+	numSamples2_1 = numSamples2 - timedelta(days=1)
+	
+	numSamples1_disp = str(numSamples1)[:10]
+	numSamples2_disp = str(numSamples2_1)[:10]
+	
+	lastDate, power = getLastData()
+	firstDate, nada1 = getFirstData()
+	power = round(power, 2)
+
+	energyToday = getHistDataEnergyToday()
+
+	templateData = {
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'minDateSel'				: numSamples1_disp,
+		'maxDateSel'				: numSamples2_disp,
+		'minDate'					: firstDate[:10],
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		#'sysTemp'					: round(cpu.temperature, 1)
+	}
+	
+	return render_template('matplotlib_downloadable.html', **templateData)
+
+@app.route("/matplotlib_downloadable.html", methods=['POST'])
+def old_graphs_post():
+	global  numSamples1, numSamples2
+
+	numSamples2 = request.form['numSamples2']
+	numSamples2 = datetime.strptime(numSamples2, "%Y-%m-%d")
+
+	numSamples1_disp = str(numSamples1)[:10]
+	numSamples2_disp = str(numSamples2)[:10]
+
+	numSamples2 = numSamples2 + timedelta(days=1)
+
+    #cpu = CPUTemperature()
+
+	lastDate, power = getLastData()
+	firstDate, nada1 = getFirstData()
+	power = round(power, 2)
+
+	energyToday = getHistDataEnergyToday()
+
+	templateData = {
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'minDateSel'				: numSamples1_disp,
+		'maxDateSel'				: numSamples2_disp,
+		'minDate'					: firstDate[:10],
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		#'sysTemp'					: round(cpu.temperature, 1)
+	}
+	
+	return render_template('matplotlib_downloadable.html', **templateData)
+
+@app.route("/settings.html")
+def settings():
+	global  numSamples1, numSamples2
+	setGlobalVars()
+	#cpu = CPUTemperature()
+
+	numSamples2_1 = numSamples2 - timedelta(days=1)
+	
+	numSamples1_disp = str(numSamples1)[:10]
+	numSamples2_disp = str(numSamples2_1)[:10]
+	
+	lastDate, power = getLastData()
+	firstDate, nada1 = getFirstData()
+	power = round(power, 2)
+
+	energyToday = getHistDataEnergyToday()
+
+	templateData = {
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'minDateSel'				: numSamples1_disp,
+		'maxDateSel'				: numSamples2_disp,
+		'minDate'					: firstDate[:10],
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		#'sysTemp'					: round(cpu.temperature, 1)
+	}
+	return render_template('settings.html', **templateData)
+
+@app.route("/usage.html")
+def usage():
+	global  numSamples1, numSamples2
+	setGlobalVars()
+	#cpu = CPUTemperature()
+
+	numSamples2_1 = numSamples2 - timedelta(days=1)
+	
+	numSamples1_disp = str(numSamples1)[:10]
+	numSamples2_disp = str(numSamples2_1)[:10]
+	
+	lastDate, power = getLastData()
+	firstDate, nada1 = getFirstData()
+	power = round(power, 2)
+
+	energyToday = getHistDataEnergyToday()
+
+	templateData = {
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'minDateSel'				: numSamples1_disp,
+		'maxDateSel'				: numSamples2_disp,
+		'minDate'					: firstDate[:10],
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		#'sysTemp'					: round(cpu.temperature, 1)
+	}
+	return render_template('usage.html', **templateData)
 
 @app.route("/icons.html")
 def icons():
@@ -278,6 +396,8 @@ def typography():
 def user():
 	
 	return render_template('user.html')
+
+
 
 
 

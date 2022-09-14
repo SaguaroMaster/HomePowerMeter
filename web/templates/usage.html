@@ -34,7 +34,7 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li >
             <a href="./">
               <i class="nc-icon nc-bank"></i>
               <p>Dashboard</p>
@@ -46,7 +46,7 @@
               <p>Old Graphs</p>
             </a>
           </li>
-          <li>
+          <li class="active ">
             <a href="./usage.html">
               <i class="nc-icon nc-alert-circle-i"></i>
               <p>Usage</p>
@@ -58,6 +58,7 @@
               <p>Settings</p>
             </a>
           </li>
+          
           <li>
             <a href="./icons.html">
               <i class="nc-icon nc-diamond"></i>
@@ -87,24 +88,7 @@
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
           </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            Get Graph Data: &nbsp;
-            <form method="POST">
-              <div class="input-group no-border">
-
-                  <input class="form-control" type="date" id="end" name="numSamples2"
-                  value="{{maxDateSel}}" 
-                  min="{{minDate}}"
-                  max="{{maxDate}}"
-                  style="margin: .25%">
         
-                  <input type="submit" class="btn btn-info" style="margin: 2%;">
-                
-              </div>
-            </form>
-            <ul class="navbar-nav">
-            </ul>
-          </div>
         </div>
       </nav>
       <!-- End Navbar -->
@@ -216,50 +200,92 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Power Today</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="power-today" data-graphdatax='{{ powerX|tojson }}' data-graphdatay='{{ powerY|tojson }}' height="100"></canvas>
+        <div class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="title">Paper Table Heading</h5>
+                  <p class="category">Created using Montserrat Font Family</p>
+                </div>
+                <div class="card-body">
+                  <div class="typography-line">
+                    <h1><span>Header 1</span>The Life of Paper Dashboard </h1>
+                  </div>
+                  <div class="typography-line">
+                    <h2><span>Header 2</span>The Life of Paper Dashboard </h2>
+                  </div>
+                  <div class="typography-line">
+                    <h3><span>Header 3</span>The Life of Paper Dashboard </h3>
+                  </div>
+                  <div class="typography-line">
+                    <h4><span>Header 4</span>The Life of Paper Dashboard </h4>
+                  </div>
+                  <div class="typography-line">
+                    <h5><span>Header 5</span>The Life of Paper Dashboard </h5>
+                  </div>
+                  <div class="typography-line">
+                    <h6><span>Header 6</span>The Life of Paper Dashboard </h6>
+                  </div>
+                  <div class="typography-line">
+                    <p><span>Paragraph</span>
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at.
+                    </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Quote</span>
+                    <blockquote>
+                      <p class="blockquote blockquote-primary">
+                        "I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at."
+                        <br>
+                        <br>
+                        <small>
+                          - Noaa
+                        </small>
+                      </p>
+                    </blockquote>
+                  </div>
+                  <div class="typography-line">
+                    <span>Muted Text</span>
+                    <p class="text-muted">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...
+                    </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Primary Text</span>
+                    <p class="text-primary">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...</p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Info Text</span>
+                    <p class="text-info">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Success Text</span>
+                    <p class="text-success">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Warning Text</span>
+                    <p class="text-warning">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...
+                    </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Danger Text</span>
+                    <p class="text-danger">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
+                  </div>
+                  <div class="typography-line">
+                    <h2><span>Small Tag</span>
+                      Header with small subtitle <br>
+                      <small>Use "small" tag for the headers</small>
+                    </h2>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Energy Consumption / Day</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="daily-energy" data-graphdatax='{{ energyDailyMonthX|tojson }}' data-graphdatay='{{ energyDailyMonthY|tojson }}' data-graphdatacosty='{{ energyDailyMonthCostY|tojson }}' height="100"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Average Energy / Day / Month</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="average-energy" data-graphdatax='{{ averageEnergyX|tojson }}' data-graphdatay='{{ averageEnergyY|tojson }}' data-graphdatacosty='{{ averageEnergyCostY|tojson }}' height="100"></canvas>
-              </div>
-              
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">Total Energy / Month</h5>
-              </div>
-              <div class="card-body">
-                <canvas id="total-energy" data-graphdatax='{{ totalEnergyX|tojson }}' data-graphdatay='{{ totalEnergyY|tojson }}' data-graphdatacosty='{{ totalEnergyCostY|tojson }}' height="100"></canvas>
-              </div>
-              
           </div>
         </div>
         

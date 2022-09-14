@@ -4,6 +4,7 @@
 from datetime import datetime, timedelta
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+from gpiozero import CPUTemperature
 import io
 import threading
 import pandas
@@ -152,6 +153,8 @@ def index():
 			MonthlyEnergyConsumed[0][j]=MonthlyEnergyConsumed[0][j][5:7]
 	MonthlyEnergyConsumedCost = [x * costPerKwh for x in MonthlyEnergyConsumed[1]]
 
+	cpu = CPUTemperature()
+
 	numSamples2_1 = numSamples2 - timedelta(days=1)
 	
 	numSamples1_disp = str(numSamples1)[:10]
@@ -181,7 +184,8 @@ def index():
 	  'averageEnergyCostY'		: AverageEnergyDailyCost,
 	  'totalEnergyX'			: MonthlyEnergyConsumed[0],
 	  'totalEnergyY'			: MonthlyEnergyConsumed[1],
-	  'totalEnergyCostY'		: MonthlyEnergyConsumedCost
+	  'totalEnergyCostY'		: MonthlyEnergyConsumedCost,
+	  'sysTemp'					: round(cpu.temperature, 1)
 	}
 
 	return render_template('dashboard.html', **templateData)

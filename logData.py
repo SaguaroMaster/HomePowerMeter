@@ -34,7 +34,7 @@ def logData (power, energy):
 
 # main function
 while True:
-	time.sleep(0.01)
+	
 	if time.time() > time1+sampleFreqency:
 		energy = flashCount #Wh
 		power = energy * 0.36/(sampleFreqency/10) # kW

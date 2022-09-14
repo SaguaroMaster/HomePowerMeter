@@ -166,26 +166,25 @@ def index():
 	energyToday = getHistDataEnergyToday()
 
 	templateData = {
-      'power'		: power,
-      'energytoday'	: energyToday,
-	  'minDateSel'	: numSamples1_disp,
-	  'maxDateSel'	: numSamples2_disp,
-	  'minDate'		: firstDate[:10],
-	  'maxDate'		: lastDate[:10],
-	  'maxDateFull'	: lastDate[11:],
-	  'averageEnergyOverall'	: 10,
-	  'powerX'					: PowerToday[0],
-	  'powerY'					: PowerTodayRounded,
-	  'energyDailyMonthX'		: DailyEnergy[0],
-	  'energyDailyMonthY'		: DailyEnergy[1],
-	  'energyDailyMonthCostY'	: DailyEnergyCost,
-	  'averageEnergyX'			: AverageEnergyDaily[0],
-	  'averageEnergyY'			: AverageEnergyDaily[1],
-	  'averageEnergyCostY'		: AverageEnergyDailyCost,
-	  'totalEnergyX'			: MonthlyEnergyConsumed[0],
-	  'totalEnergyY'			: MonthlyEnergyConsumed[1],
-	  'totalEnergyCostY'		: MonthlyEnergyConsumedCost,
-	  'sysTemp'					: round(cpu.temperature, 1)
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'minDateSel'				: numSamples1_disp,
+		'maxDateSel'				: numSamples2_disp,
+		'minDate'					: firstDate[:10],
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		'powerX'					: PowerToday[0],
+		'powerY'					: PowerTodayRounded,
+		'energyDailyMonthX'			: DailyEnergy[0],
+		'energyDailyMonthY'			: DailyEnergy[1],
+		'energyDailyMonthCostY'		: DailyEnergyCost,
+		'averageEnergyX'			: AverageEnergyDaily[0],
+		'averageEnergyY'			: AverageEnergyDaily[1],
+		'averageEnergyCostY'		: AverageEnergyDailyCost,
+		'totalEnergyX'				: MonthlyEnergyConsumed[0],
+		'totalEnergyY'				: MonthlyEnergyConsumed[1],
+		'totalEnergyCostY'			: MonthlyEnergyConsumedCost,
+		'sysTemp'					: round(cpu.temperature, 1)
 	}
 
 	return render_template('dashboard.html', **templateData)
@@ -224,31 +223,33 @@ def my_form_post():
         MonthlyEnergyConsumed[0][j]=MonthlyEnergyConsumed[0][j][5:7]
     MonthlyEnergyConsumedCost = [x * costPerKwh for x in MonthlyEnergyConsumed[1]]
 
+    cpu = CPUTemperature()
+
     lastDate, power, energy = getLastData()
     firstDate, nada1, nada2 = getFirstData()
 
     energyToday = getHistDataEnergyToday()
 
     templateData = {
-      'power'		: power,
-      'energytoday'	: energyToday,
-	  'minDateSel'	: numSamples1_disp,
-	  'maxDateSel'	: numSamples2_disp,
-	  'minDate'		: firstDate[:10],
-	  'maxDate'		: lastDate[:10],
-	  'maxDateFull'	: lastDate[11:],
-	  'averageEnergyOverall'	: 10,
-	  'powerX'					: PowerToday[0],
-	  'powerY'					: PowerTodayRounded,
-	  'energyDailyMonthX'		: DailyEnergy[0],
-	  'energyDailyMonthY'		: DailyEnergy[1],
-	  'energyDailyMonthCostY'	: DailyEnergyCost,
-	  'averageEnergyX'			: AverageEnergyDaily[0],
-	  'averageEnergyY'			: AverageEnergyDaily[1],
-	  'averageEnergyCostY'		: AverageEnergyDailyCost,
-	  'totalEnergyX'			: MonthlyEnergyConsumed[0],
-	  'totalEnergyY'			: MonthlyEnergyConsumed[1],
-	  'totalEnergyCostY'		: MonthlyEnergyConsumedCost
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'minDateSel'				: numSamples1_disp,
+		'maxDateSel'				: numSamples2_disp,
+		'minDate'					: firstDate[:10],
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		'powerX'					: PowerToday[0],
+		'powerY'					: PowerTodayRounded,
+		'energyDailyMonthX'			: DailyEnergy[0],
+		'energyDailyMonthY'			: DailyEnergy[1],
+		'energyDailyMonthCostY'		: DailyEnergyCost,
+		'averageEnergyX'			: AverageEnergyDaily[0],
+		'averageEnergyY'			: AverageEnergyDaily[1],
+		'averageEnergyCostY'		: AverageEnergyDailyCost,
+		'totalEnergyX'				: MonthlyEnergyConsumed[0],
+		'totalEnergyY'				: MonthlyEnergyConsumed[1],
+		'totalEnergyCostY'			: MonthlyEnergyConsumedCost,
+		'sysTemp'					: round(cpu.temperature, 1)
 	}
 
     return render_template('dashboard.html', **templateData)

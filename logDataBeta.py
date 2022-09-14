@@ -4,14 +4,12 @@
 import time
 import sqlite3
 import random
-import asyncio
-
+from threading import Timer
 
 dbname='/home/pi/dummy.db'
-sampleFreqency = 3 #seconds
+sampleFreqency = 60 #seconds
 flashCount = 0
-time1 = time2 = time3 = time.time()
-
+time1 = time.time()
 
 # log sensor data on database
 def logData (power, energy):
@@ -23,11 +21,8 @@ def logData (power, energy):
 	conn.commit()
 	conn.close()
 
-async def test():
-	
-	time2 = time.time
+def doStuff():
 	energy = random.randint(1,10)
-	#energy = flashCount #Wh
 	power = energy * 0.36/(sampleFreqency/10) # kW
 	print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
 	#logData(power, energy)
@@ -35,13 +30,8 @@ async def test():
 	flashCount = 0
 
 	time1 = time.time()
-	time3 = time.time()
-	timeDiff = time3-time1
-	print(timeDiff)
-	await asyncio.sleep(3)
-	return test()
+	t = Timer(2.0, doStuff)
+	t.start()
 # main function
-test()
-	
-
-
+t = Timer(2.0, doStuff)
+t.start()

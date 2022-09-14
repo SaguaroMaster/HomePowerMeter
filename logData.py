@@ -4,6 +4,7 @@
 import time
 import sqlite3
 import random
+from threading import Timer
 
 dbname='/home/pi/dummy.db'
 sampleFreqency = 60 #seconds
@@ -32,17 +33,21 @@ def logData (power, energy):
 	conn.commit()
 	conn.close()
 
+def stuff():
+	energy = flashCount #Wh
+	power = energy * 0.36/(sampleFreqency/10) # kW
+	print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
+	logData(power, energy)
+
+	flashCount = 0
+
+	time1 = time.time()
+	t = Timer(2.0, stuff)
+	t.start()
 # main function
-while True:
-	
-	if time.time() > time1+sampleFreqency:
-		energy = flashCount #Wh
-		power = energy * 0.36/(sampleFreqency/10) # kW
-		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
-		logData(power, energy)
 
-		flashCount = 0
-
-		time1 = time.time()
+		
 
 
+t = Timer(2.0, stuff)
+t.start()

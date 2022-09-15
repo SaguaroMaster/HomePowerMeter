@@ -7,7 +7,7 @@ import random
 from threading import Timer
 
 dbname='/home/pi/dummy.db'
-sampleFreqency = 10 #seconds
+sampleFreqency = 60 #seconds
 flashCount = 0
 time1 = time.time()
 
@@ -33,19 +33,7 @@ def logData (power, energy):
 	conn.commit()
 	conn.close()
 
-def doStuff():
-	t = Timer(sampleFreqency, doStuff)
-	t.start()
-	energy = random.randint(1,10)
-	power = energy * 0.36/(sampleFreqency/10) # kW
-	print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
-	#logData(power, energy)
-
-	flashCount = 0
-
-	time1 = time.time()
 # main function
-'''
 while True:
 	if time.time() > time1+sampleFreqency:
 		energy = flashCount #Wh
@@ -53,7 +41,6 @@ while True:
 		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
 		logData(power, energy)
 		flashCount = 0
-		time1 = time.time()'''
+		time1 = time.time()
 
-t = Timer(sampleFreqency, doStuff)
-t.start()
+		

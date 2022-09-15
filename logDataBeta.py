@@ -18,7 +18,7 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 def flashCounter(self):
-	global flashCount
+	global flashCount, time1
 	if not GPIO.input(17):
 		print("Light!")
 		flashCount = flashCount + 1

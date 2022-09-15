@@ -18,11 +18,10 @@ GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def flashCounter(self):
 	global flashCount
-	if not GPIO.input(17):
-		print("Light!")
-		flashCount = flashCount + 1
+	print("Light!")
+	flashCount = flashCount + 1
 
-GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)
+GPIO.add_event_detect(17, GPIO.FALLING, callback=flashCounter, bouncetime=50)
 # log sensor data on database
 def logData (power, energy):
 	
@@ -36,11 +35,11 @@ def logData (power, energy):
 # main function
 while True:
 	if time.time() > time1+sampleFreqency:
+		time1 = time.time()
 		energy = flashCount #Wh
 		power = energy * 0.36/(sampleFreqency/10) # kW
-		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
+		#print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
 		logData(power, energy)
 		flashCount = 0
-		time1 = time.time()
-
+	time.sleep(0.01)
 		

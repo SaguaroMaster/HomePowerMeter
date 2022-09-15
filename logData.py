@@ -28,7 +28,7 @@ def logData (power, energy):
 	conn=sqlite3.connect(dbname)
 	curs=conn.cursor()
 	
-	curs.execute("INSERT INTO data values(datetime('now'), (?), (?))", (power, energy))
+	curs.execute("INSERT INTO data values(datetime('now', 'localtime'), (?), (?))", (power, energy))
 	conn.commit()
 	conn.close()
 

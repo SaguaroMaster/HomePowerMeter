@@ -33,7 +33,7 @@ costPerKwh = 0.14 #EUR
 
 def getLastData():
 	for row in curs.execute("SELECT * FROM data ORDER BY timestamp DESC LIMIT 1"):
-		time = str(row[0])
+		time = row[0]
 		power = row[1]
 	#conn.close()
 	return time, power

@@ -10,6 +10,7 @@ dbname='/home/pi/dummy.db'
 sampleFreqency = 10 #seconds
 flashCount = 0
 time1 = time.time()
+count = 0
 
 import RPi.GPIO as GPIO  
 GPIO.setmode(GPIO.BCM)
@@ -22,7 +23,7 @@ def flashCounter(self):
 		print("Light!")
 		flashCount = flashCount + 1
 
-
+GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)
 # log sensor data on database
 def logData (power, energy):
 	
@@ -33,20 +34,7 @@ def logData (power, energy):
 	conn.commit()
 	conn.close()
 
-def doStuff():
-	t = Timer(sampleFreqency, doStuff)
-	t.start()
-	#energy = random.randint(1,10)
-	energy = flashCount
-	power = energy * 0.36/(sampleFreqency/10) # kW
-	print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
-	#logData(power, energy)
-
-	flashCount = 0
-
-	time1 = time.time()
 # main function
-'''
 while True:
 	if time.time() > time1+sampleFreqency:
 		energy = flashCount #Wh
@@ -54,9 +42,7 @@ while True:
 		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
 		logData(power, energy)
 		flashCount = 0
-		time1 = time.time()'''
+		time1 = time.time()
+	time.sleep(0.01)
 
-t = Timer(sampleFreqency, doStuff)
-t.start()
-
-GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)
+		

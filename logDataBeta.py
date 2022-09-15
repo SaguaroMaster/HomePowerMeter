@@ -36,8 +36,8 @@ def logData (power, energy):
 def doStuff():
 	t = Timer(sampleFreqency, doStuff)
 	t.start()
-	energy = random.randint(1,10)
-	#energy = flashCount
+	#energy = random.randint(1,10)
+	energy = flashCount
 	power = energy * 0.36/(sampleFreqency/10) # kW
 	print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
 	#logData(power, energy)

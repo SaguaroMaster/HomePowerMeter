@@ -42,6 +42,5 @@ def logData (power, energy):
 	conn.commit()
 	conn.close()
 
-
-
-		
+while True:
+	time.sleep(0.1)

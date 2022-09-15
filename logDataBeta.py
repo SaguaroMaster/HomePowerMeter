@@ -22,7 +22,7 @@ def flashCounter(self):
 		print("Light!")
 		flashCount = flashCount + 1
 
-GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)
+
 # log sensor data on database
 def logData (power, energy):
 	
@@ -58,3 +58,5 @@ while True:
 
 t = Timer(sampleFreqency, doStuff)
 t.start()
+
+GPIO.add_event_detect(17, GPIO.BOTH, callback=flashCounter, bouncetime=50)

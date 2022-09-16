@@ -30,8 +30,8 @@ def logData(power, energy):
 	
 	curs.execute("INSERT INTO data values(datetime('now', 'localtime'), (?), (?))", (power, energy))
 	conn.commit()
-	for row in curs.execute("SELECT * FROM settings ORDER BY timestamp DESC LIMIT 1"):
-		samplingPeriod = row[1]
+	for row in curs.execute("SELECT sampling_period FROM settings ORDER BY timestamp DESC LIMIT 1"):
+		samplingPeriod = row[0]
 		if samplingPeriod > 900 : 
 			samplePeriod = 900
 		elif samplePeriod < 3 :

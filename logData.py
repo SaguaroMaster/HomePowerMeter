@@ -27,9 +27,14 @@ def logData(power, energy):
 	
 	conn=sqlite3.connect(dbname)
 	curs=conn.cursor()
-	
+
 	curs.execute("INSERT INTO data values(datetime('now', 'localtime'), (?), (?))", (power, energy))
 	conn.commit()
+	conn.close()
+
+def getSetting():
+	conn=sqlite3.connect(dbname)
+	curs=conn.cursor()
 	for row in curs.execute("SELECT sampling_period FROM settings ORDER BY timestamp DESC LIMIT 1"):
 		samplingPeriod = row[0]
 		if samplingPeriod > 900 : 
@@ -38,8 +43,9 @@ def logData(power, energy):
 			samplingPeriod = 3
 	conn.close()
 	return samplingPeriod
-
 # main function
+
+samplePeriod = getSetting()
 
 while True:
 	if time.time() > time1+samplePeriod:
@@ -47,7 +53,8 @@ while True:
 		energy = flashCount #Wh
 		power = energy * 0.36/(samplePeriod/10) # kW
 		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
-		samplePeriod = logData(power, energy)
+		samplePeriod = getSetting()
+		logData(power, energy)
 		flashCount = 0
 	time.sleep(0.01)
 		

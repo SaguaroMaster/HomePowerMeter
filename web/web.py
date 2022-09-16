@@ -209,7 +209,7 @@ setGlobalVars()
 def index():
 	global  numSamples1, numSamples2
 	setGlobalVars()
-
+	lastEdit, samplingPeriod, language, theme = getSettings()
 	PowerToday, DailyEnergy, DailyEnergyCost, AverageEnergyDaily, AverageEnergyDailyCost, MonthlyEnergyConsumed, MonthlyEnergyConsumedCost = getTemplateData(numSamples1)
 
 	numSamples2_1 = numSamples2 - timedelta(days=1)
@@ -242,7 +242,8 @@ def index():
 		'totalEnergyX'				: MonthlyEnergyConsumed[0],
 		'totalEnergyY'				: MonthlyEnergyConsumed[1],
 		'totalEnergyCostY'			: MonthlyEnergyConsumedCost,
-		'sysTemp'					: getCPUTemp()
+		'sysTemp'					: getCPUTemp(),
+		'samplingPeriod'			: samplingPeriod
 	}
 
 	return render_template('dashboard.html', **templateData)
@@ -250,7 +251,7 @@ def index():
 @app.route('/', methods=['POST'])
 def my_form_post():
     global  numSamples1, numSamples2
-
+    lastEdit, samplingPeriod, language, theme = getSettings()
     numSamples2 = request.form['numSamples2']
     numSamples2 = datetime.strptime(numSamples2, "%Y-%m-%d")
 
@@ -286,7 +287,8 @@ def my_form_post():
 		'totalEnergyX'				: MonthlyEnergyConsumed[0],
 		'totalEnergyY'				: MonthlyEnergyConsumed[1],
 		'totalEnergyCostY'			: MonthlyEnergyConsumedCost,
-		'sysTemp'					: getCPUTemp()
+		'sysTemp'					: getCPUTemp(),
+		'samplingPeriod'			: samplingPeriod
 	}
 
     return render_template('dashboard.html', **templateData)

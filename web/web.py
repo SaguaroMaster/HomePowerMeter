@@ -379,14 +379,15 @@ def settings_post():
 
 	if request.form['save'] == 'Save changes':
 		saveSettings(samplingPeriod, language, theme)
-	elif request.form['save'] == 'Reboot System' and sys() == 'Linux':
+	elif request.form['save'] == 'Reboot' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language, theme)
 		os.system('sudo reboot')
-	elif request.form['save'] == 'Update' and sys() == 'Linux':
+	elif request.form['save'] == 'Update & Reboot' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language, theme)
 		os.chdir('/home/pi/what')
 		os.system('sudo git pull')
-		
+		os.system('sudo reboot')
+
 
 	templateData = {
 		'power'						: power,

@@ -39,8 +39,8 @@ def getSetting():
 		samplingPeriod = row[0]
 		if samplingPeriod > 900 : 
 			samplingPeriod = 900
-		elif samplingPeriod < 3 :
-			samplingPeriod = 3
+		elif samplingPeriod < 10 :
+			samplingPeriod = 10
 	conn.close()
 	return samplingPeriod
 # main function

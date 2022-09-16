@@ -361,8 +361,8 @@ def settings_post():
 		pass
 	if samplingPeriod > 900:
 		samplingPeriod = 900
-	elif samplingPeriod < 3:
-		samplingPeriod = 3
+	elif samplingPeriod < 10:
+		samplingPeriod = 10
 
 	language_new = request.form['language']
 	if language_new in ['en','hu','sk']:
@@ -370,7 +370,7 @@ def settings_post():
 
 	if request.form['save'] == 'Save changes':
 		saveSettings(samplingPeriod, language)
-	elif request.form['save'] == 'Save & Reboot' and sys() == 'Linux':
+	elif request.form['save'] == 'Reboot System' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language)
 		os.system('sudo reboot')
 

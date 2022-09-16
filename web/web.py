@@ -382,7 +382,7 @@ def settings_post():
 	elif request.form['save'] == 'Reboot' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language, theme)
 		os.system('sudo reboot')
-	elif request.form['save'] == 'Update & Reboot' and sys() == 'Linux':
+	elif request.form['save'] == 'Update' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language, theme)
 		os.chdir('/home/pi/what')
 		os.system('sudo git pull')

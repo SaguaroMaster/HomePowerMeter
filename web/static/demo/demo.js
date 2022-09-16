@@ -341,6 +341,40 @@ demo = {
         align: align
       }
     });
+  },
+
+  showNotificationUpdate: function(from, align) {
+    color = 'warning';
+
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: "<b>Updating...</b> This usually takes around 5 seconds."
+
+    }, {
+      type: color,
+      timer: 8000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
+  },
+
+  showNotificationReboot: function(from, align) {
+    color = 'danger';
+
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: "<b>Rebooting...</b> This usually takes around 1 minute."
+
+    }, {
+      type: color,
+      timer: 8000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
   }
 
 };

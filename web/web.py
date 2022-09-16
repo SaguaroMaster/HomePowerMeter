@@ -386,6 +386,7 @@ def settings_post():
 		saveSettings(samplingPeriod, language, theme)
 		os.chdir('/home/pi/what')
 		os.system('sudo git pull')
+		
 
 	templateData = {
 		'power'						: power,

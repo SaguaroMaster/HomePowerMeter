@@ -15,7 +15,6 @@ import pandas
 import dateutil.relativedelta
 import calendar
 import sqlite3
-import git
 
 
 app = Flask(__name__)
@@ -23,11 +22,9 @@ app = Flask(__name__)
 
 if sys() == 'Windows':
 	conn=sqlite3.connect('./dummy.db', check_same_thread=False)
-	gitDir = 'C:/Users/krisi/Desktop/HomePowerMeter-1/'
 else:
 	conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
 	from gpiozero import CPUTemperature
-	gitDir = '/home/pi/what/'
 curs=conn.cursor()
 
 lock = threading.Lock()

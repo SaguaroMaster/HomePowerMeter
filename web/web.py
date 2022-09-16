@@ -372,7 +372,7 @@ def settings_post():
 		saveSettings(samplingPeriod, language)
 	elif request.form['save'] == 'Save & Reboot' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language)
-		os.system('sudo shutdown now')
+		os.system('sudo reboot')
 
 	templateData = {
 		'power'						: power,

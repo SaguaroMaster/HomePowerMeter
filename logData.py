@@ -33,9 +33,9 @@ def logData(power, energy):
 	for row in curs.execute("SELECT sampling_period FROM settings ORDER BY timestamp DESC LIMIT 1"):
 		samplingPeriod = row[0]
 		if samplingPeriod > 900 : 
-			samplePeriod = 900
-		elif samplePeriod < 3 :
-			samplePeriod = 3
+			samplingPeriod = 900
+		elif samplingPeriod < 3 :
+			samplingPeriod = 3
 	conn.close()
 	return samplingPeriod
 

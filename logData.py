@@ -52,7 +52,7 @@ while True:
 		time1 = time.time()
 		energy = flashCount #Wh
 		power = energy * 0.36/(samplePeriod/10) # kW
-		print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
+		#print("Power: " + str(power) + "kW, Energy: " + str(energy) + "Wh")
 		samplePeriod = getSetting()
 		logData(power, energy)
 		flashCount = 0

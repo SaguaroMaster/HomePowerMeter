@@ -1576,7 +1576,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
     display: none; }
   .offline-doc .navbar.navbar-transparent .navbar-brand,
   .offline-doc .navbar.navbar-transparent .collapse .navbar-nav .nav-link {
-    color: #FFFFFF !important; }
+    color: #a70b0b !important; }
 
 .offline-doc .footer {
   z-index: 3 !important; }

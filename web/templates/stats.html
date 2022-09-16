@@ -52,13 +52,13 @@
               <p>Usage</p>
             </a>
           </li>
-          <li>
+          <li class="active ">
             <a href="./stats.html">
               <i class="nc-icon nc-zoom-split"></i>
               <p>Stats</p>
             </a>
           </li>
-          <li class="active">
+          <li>
             <a href="./settings.html">
               <i class="nc-icon nc-settings-gear-65"></i>
               <p>Settings</p>
@@ -206,64 +206,91 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
-          <div class="card card-user">
-            <div class="card-header">
-              <h5 class="card-title">Settings</h5>
-            </div>
-            <div class="card-body">
-              <form method="POST">
-                <div class="row">
-                  <div class="col-md-3 pr-1">
-                    <div class="form-group">
-                      <label>Sampling period (3-900 sec)</label>
-                      <input type="text" class="form-control" placeholder="Sampling Period" name="samplingPeriod" value="{{samplingPeriod}}">
-                    </div>
+        <div class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="title">Paper Table Heading</h5>
+                  <p class="category">Created using Montserrat Font Family</p>
+                </div>
+                <div class="card-body">
+                  <div class="typography-line">
+                    <h1><span>Header 1</span>The Life of Paper Dashboard </h1>
+                  </div>
+                  <div class="typography-line">
+                    <h2><span>Header 2</span>The Life of Paper Dashboard </h2>
+                  </div>
+                  <div class="typography-line">
+                    <h3><span>Header 3</span>The Life of Paper Dashboard </h3>
+                  </div>
+                  <div class="typography-line">
+                    <h4><span>Header 4</span>The Life of Paper Dashboard </h4>
+                  </div>
+                  <div class="typography-line">
+                    <h5><span>Header 5</span>The Life of Paper Dashboard </h5>
+                  </div>
+                  <div class="typography-line">
+                    <h6><span>Header 6</span>The Life of Paper Dashboard </h6>
+                  </div>
+                  <div class="typography-line">
+                    <p><span>Paragraph</span>
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at.
+                    </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Quote</span>
+                    <blockquote>
+                      <p class="blockquote blockquote-primary">
+                        "I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at."
+                        <br>
+                        <br>
+                        <small>
+                          - Noaa
+                        </small>
+                      </p>
+                    </blockquote>
+                  </div>
+                  <div class="typography-line">
+                    <span>Muted Text</span>
+                    <p class="text-muted">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...
+                    </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Primary Text</span>
+                    <p class="text-primary">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...</p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Info Text</span>
+                    <p class="text-info">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Success Text</span>
+                    <p class="text-success">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Warning Text</span>
+                    <p class="text-warning">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...
+                    </p>
+                  </div>
+                  <div class="typography-line">
+                    <span>Danger Text</span>
+                    <p class="text-danger">
+                      I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
+                  </div>
+                  <div class="typography-line">
+                    <h2><span>Small Tag</span>
+                      Header with small subtitle <br>
+                      <small>Use "small" tag for the headers</small>
+                    </h2>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-3 pr-1">
-                    <div class="form-group">
-                      <label>Language</label>
-                      <select class="form-control" name="language" id="language">
-                        <option value="en">English</option>
-                        <option value="hu">Magyar</option>
-                        <option value="sk">Slovenský</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3 pr-1">
-                    <div class="form-group">
-                      <label>Theme</label>
-                      <select class="form-control" name="theme" id="theme">
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3 pr-1">
-                    <div class="form-group">
-                      <label>Last edited on</label>
-                      <input type="text" disabled="" class="form-control" placeholder="Date" value="{{lastEdit}}">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="update ml-auto mr-auto">
-                    <input type="submit" class="btn btn-primary" name="save" value="Save changes">
-                  </div>
-                  <div class="col-md-1 d-flex justify-content-end">
-                    <input type="submit" class="btn btn-danger" name="save" value="Reboot System">
-                  </div>
-                  <div class="col-md-1 d-flex justify-content-end">
-                    <input type="submit" class="btn btn-warning" name="save" value="Update">
-                  </div>
-                </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>

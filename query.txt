@@ -1,6 +1,7 @@
 to set up database:
 CREATE TABLE data(timestamp DATETIME, power NUMERIC, energy NUMERIC);
-CREATE TABLE settings(timestamp DATETIME, sampling_period NUMERIC, language varchar(255));
+CREATE TABLE settings(timestamp DATETIME, sampling_period NUMERIC, language varchar(255), theme varchar(255));
+INSERT INTO settings values(datetime('now', 'localtime'), 60, 'en', 'light');
 
 to start thigs on boot do in shell in home directory:
 cp HomePowerMeter/startup.sh startup.sh

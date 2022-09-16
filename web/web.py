@@ -15,6 +15,7 @@ import pandas
 import dateutil.relativedelta
 import calendar
 import sqlite3
+import git
 
 
 app = Flask(__name__)
@@ -22,9 +23,11 @@ app = Flask(__name__)
 
 if sys() == 'Windows':
 	conn=sqlite3.connect('./dummy.db', check_same_thread=False)
+	gitDir = 'C:/Users/krisi/Desktop/HomePowerMeter-1'
 else:
 	conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
 	from gpiozero import CPUTemperature
+	gitDir = '/home/pi/what/'
 curs=conn.cursor()
 
 lock = threading.Lock()
@@ -181,8 +184,8 @@ def basicTemplate():
 
 	return templateData
 
-def saveSettings(samplingPeriod, language):
-	curs.execute("INSERT INTO settings values(datetime('now', 'localtime'), (?), (?))", (samplingPeriod, language))
+def saveSettings(samplingPeriod, language, theme):
+	curs.execute("INSERT INTO settings values(datetime('now', 'localtime'), (?), (?), (?))", (samplingPeriod, language, theme))
 	conn.commit()
 
 def getSettings():
@@ -190,10 +193,10 @@ def getSettings():
 		lastEdit = row[0]
 		samplingPeriod = row[1]
 		language = row[2]
-		return lastEdit, samplingPeriod, language
-	return None, None, None
+		theme = row[3]
+		return lastEdit, samplingPeriod, language, theme
+	return None, None, None, None
 	
-
 #initialize global variables
 global numSamples1, numSamples2
 setGlobalVars()
@@ -246,7 +249,6 @@ def index():
 	}
 
 	return render_template('dashboard.html', **templateData)
-
 
 @app.route('/', methods=['POST'])
 def my_form_post():
@@ -331,7 +333,7 @@ def old_graphs_post():
 @app.route("/settings.html")
 def settings():
 
-	lastEdit, samplingPeriod, language = getSettings()
+	lastEdit, samplingPeriod, language, theme = getSettings()
 	energyToday = getHistDataEnergyToday()
 	lastDate, power = getLastData()
 	power = round(power, 2)
@@ -344,13 +346,16 @@ def settings():
 		'maxDateFull'				: lastDate[11:],
 		'sysTemp'					: getCPUTemp(),
 		'samplingPeriod'			: samplingPeriod,
-		'language'					: language
+		'language'					: language,
+		'lastEdit'					: lastEdit,
+		'theme'						: theme
 	}
 	return render_template('settings.html', **templateData)
 
 @app.route("/settings.html", methods=['POST'])
 def settings_post():
-	lastEdit, samplingPeriod, language = getSettings()
+	global gitDir
+	lastEdit, samplingPeriod, language, theme = getSettings()
 	energyToday = getHistDataEnergyToday()
 	lastDate, power = getLastData()
 	power = round(power, 2)
@@ -368,11 +373,19 @@ def settings_post():
 	if language_new in ['en','hu','sk']:
 		language = language_new
 
+	theme_new = request.form['theme']
+	if theme_new in ['light','dark']:
+		language = language_new
+
 	if request.form['save'] == 'Save changes':
-		saveSettings(samplingPeriod, language)
+		saveSettings(samplingPeriod, language, theme)
 	elif request.form['save'] == 'Reboot System' and sys() == 'Linux':
-		saveSettings(samplingPeriod, language)
+		saveSettings(samplingPeriod, language, theme)
 		os.system('sudo reboot')
+	elif request.form['save'] == 'Update' and sys() == 'Linux':
+		saveSettings(samplingPeriod, language, theme)
+		g = git.cmd.Git(git_dir)
+		g.pull()
 
 	templateData = {
 		'power'						: power,
@@ -381,7 +394,9 @@ def settings_post():
 		'maxDateFull'				: lastDate[11:],
 		'sysTemp'					: getCPUTemp(),
 		'samplingPeriod'			: samplingPeriod,
-		'language'					: language
+		'language'					: language,
+		'lastEdit'					: lastEdit,
+		'theme'						: theme
 	}
 	return render_template('settings.html', **templateData)
 
@@ -389,6 +404,11 @@ def settings_post():
 def usage():
 	templateData = basicTemplate()
 	return render_template('usage.html', **templateData)
+
+@app.route("/stats.html")
+def stats():
+	templateData = basicTemplate()
+	return render_template('stats.html', **templateData)
 
 @app.route("/icons.html")
 def icons():

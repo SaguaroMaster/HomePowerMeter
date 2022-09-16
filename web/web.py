@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, timedelta
+from genericpath import sameopenfile
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from platform import system as sys
 from flask import Flask, render_template, send_from_directory, make_response, request
 
 import io
+import os
 import threading
 import pandas
 import dateutil.relativedelta
@@ -35,7 +37,6 @@ def getLastData():
 	for row in curs.execute("SELECT * FROM data ORDER BY timestamp DESC LIMIT 1"):
 		time = row[0]
 		power = row[1]
-	#conn.close()
 	return time, power
 
 def getFirstData():
@@ -179,6 +180,20 @@ def basicTemplate():
 	}
 
 	return templateData
+
+def saveSettings(samplingPeriod, language):
+	curs.execute("INSERT INTO settings values(datetime('now', 'localtime'), (?), (?))", (samplingPeriod, language))
+	conn.commit()
+
+def getSettings():
+	for row in curs.execute("SELECT * FROM settings ORDER BY timestamp DESC LIMIT 1"):
+		lastEdit = row[0]
+		samplingPeriod = row[1]
+		language = row[2]
+		return lastEdit, samplingPeriod, language
+	return None, None, None
+	
+
 #initialize global variables
 global numSamples1, numSamples2
 setGlobalVars()
@@ -315,7 +330,59 @@ def old_graphs_post():
 
 @app.route("/settings.html")
 def settings():
-	templateData = basicTemplate()
+
+	lastEdit, samplingPeriod, language = getSettings()
+	energyToday = getHistDataEnergyToday()
+	lastDate, power = getLastData()
+	power = round(power, 2)
+	
+
+	templateData = {
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		'sysTemp'					: getCPUTemp(),
+		'samplingPeriod'			: samplingPeriod,
+		'language'					: language
+	}
+	return render_template('settings.html', **templateData)
+
+@app.route("/settings.html", methods=['POST'])
+def settings_post():
+	lastEdit, samplingPeriod, language = getSettings()
+	energyToday = getHistDataEnergyToday()
+	lastDate, power = getLastData()
+	power = round(power, 2)
+
+	try:
+		samplingPeriod = int(request.form['samplingPeriod'])
+	except ValueError:
+		pass
+	if samplingPeriod > 900:
+		samplingPeriod = 900
+	elif samplingPeriod < 3:
+		samplingPeriod = 3
+
+	language_new = request.form['language']
+	if language_new in ['en','hu','sk']:
+		language = language_new
+
+	if request.form['save'] == 'Save changes':
+		saveSettings(samplingPeriod, language)
+	elif request.form['save'] == 'Save & Reboot' and sys() == 'Linux':
+		saveSettings(samplingPeriod, language)
+		os.system('sudo shutdown now')
+
+	templateData = {
+		'power'						: power,
+		'energytoday'				: energyToday,
+		'maxDate'					: lastDate[:10],
+		'maxDateFull'				: lastDate[11:],
+		'sysTemp'					: getCPUTemp(),
+		'samplingPeriod'			: samplingPeriod,
+		'language'					: language
+	}
 	return render_template('settings.html', **templateData)
 
 @app.route("/usage.html")

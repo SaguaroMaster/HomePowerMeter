@@ -34,7 +34,7 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li>
+          <li >
             <a href="./">
               <i class="nc-icon nc-bank"></i>
               <p>Dashboard</p>
@@ -52,12 +52,13 @@
               <p>Usage</p>
             </a>
           </li>
-          <li class="active ">
+          <li class="active">
             <a href="./settings.html">
               <i class="nc-icon nc-settings-gear-65"></i>
               <p>Settings</p>
             </a>
           </li>
+          
           <li>
             <a href="./icons.html">
               <i class="nc-icon nc-diamond"></i>
@@ -87,7 +88,7 @@
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
           </button>
-          
+        
         </div>
       </nav>
       <!-- End Navbar -->
@@ -196,6 +197,61 @@
                   RPi CPU Temperature
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="card card-user">
+            <div class="card-header">
+              <h5 class="card-title">Settings</h5>
+            </div>
+            <div class="card-body">
+              <form method="POST">
+                <div class="row">
+                  <div class="col-md-3 pr-1">
+                    <div class="form-group">
+                      <label>Sampling period (3-900 sec, changing requires restart)</label>
+                      <input type="text" class="form-control" placeholder="Sampling Period" name="samplingPeriod" value="{{samplingPeriod}}">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 pr-1">
+                    <div class="form-group">
+                      <label>Language</label>
+                      <select class="form-control" name="language" id="language">
+                        <option value="en">English</option>
+                        <option value="hu">Magyar</option>
+                        <option value="sk">Slovenský</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 pr-1">
+                    <div class="form-group">
+                      <label>Whatever</label>
+                      <input type="text" class="form-control" placeholder="Bruh" name="Bruh" value="Bruh">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 pr-1">
+                    <div class="form-group">
+                      <label>Nah</label>
+                      <input type="text" class="form-control" placeholder="no" name="Bruh" value="Doesn't do anything">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="update ml-auto mr-auto">
+                    <input type="submit" class="btn btn-primary" name="save" value="Save changes">
+                  </div>
+                  <div class="col-md-1 d-flex justify-content-end">
+                    <input type="submit" class="btn btn-danger" name="save" value="Save & Reboot">
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>

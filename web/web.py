@@ -384,7 +384,7 @@ def settings_post():
 		os.system('sudo reboot')
 	elif request.form['save'] == 'Update' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language, theme)
-		g = git.cmd.Git(git_dir)
+		g = git.cmd.Git(gitDir)
 		g.pull()
 
 	templateData = {

@@ -23,7 +23,7 @@ app = Flask(__name__)
 
 if sys() == 'Windows':
 	conn=sqlite3.connect('./dummy.db', check_same_thread=False)
-	gitDir = 'C:/Users/krisi/Desktop/HomePowerMeter-1'
+	gitDir = 'C:/Users/krisi/Desktop/HomePowerMeter-1/'
 else:
 	conn=sqlite3.connect('/home/pi/dummy.db', check_same_thread=False)
 	from gpiozero import CPUTemperature
@@ -384,8 +384,8 @@ def settings_post():
 		os.system('sudo reboot')
 	elif request.form['save'] == 'Update' and sys() == 'Linux':
 		saveSettings(samplingPeriod, language, theme)
-		g = git.cmd.Git(gitDir)
-		g.pull()
+		os.chdir('/home/pi/what')
+		os.system('sudo git pull')
 
 	templateData = {
 		'power'						: power,
